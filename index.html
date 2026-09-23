@@ -82,7 +82,6 @@
 
         .hidden { display: none !important; }
 
-        /* Media Print for Inspection/Audit */
         @media print {
             .sidebar, .topbar, .btn, .no-print { display: none !important; }
             .main { padding: 0; }
@@ -144,7 +143,7 @@
                 <button class="btn btn-warn" onclick="backupJSON()">Backup Sekarang</button>
             </div>
 
-            <!-- Page 1: Dashboard View -->
+            <!-- Dashboard View -->
             <section id="page-dashboard" class="page-content">
                 <div class="banner">
                     <h2>Workspace Digital Kaur Perencanaan</h2>
@@ -158,14 +157,14 @@
                         <div class="sub">terdaftar di RKPDes</div>
                     </div>
                     <div class="card-stat">
-                        <small>Dokumen Fisik</small>
-                        <div class="val" id="stat-dokumen">2</div>
-                        <div class="sub">dalam arsip sistem</div>
+                        <small>Dokumen Terhubung</small>
+                        <div class="val" id="stat-dokumen">0</div>
+                        <div class="sub">link Google Drive aktif</div>
                     </div>
                     <div class="card-stat">
                         <small>Kesiapan Audit</small>
-                        <div class="val" id="stat-kelengkapan">60%</div>
-                        <div class="sub">rata-rata kelengkapan</div>
+                        <div class="val" id="stat-kelengkapan">0%</div>
+                        <div class="sub">berkas yang tertaut</div>
                     </div>
                     <div class="card-stat">
                         <small>Status RKPDes</small>
@@ -200,19 +199,21 @@
                     
                     <div class="card-panel">
                         <div class="card-header">
-                            <h3 class="card-title">Perhatian Audit</h3>
+                            <h3 class="card-title">Petunjuk Penggunaan</h3>
                         </div>
-                        <div id="panel-perhatian">
-                            <div style="background:#fff5f5; padding:12px; border-radius:8px; border-left:3px solid var(--danger);">
-                                <strong>Pembangunan Jalan Desa</strong>
-                                <p style="margin:5px 0 0 0; font-size:0.8rem; color:var(--muted);">Kelengkapan berkas administrasi belum 100% (SK Tim Penyusun & Berita Acara Musrenbang belum diunggah).</p>
-                            </div>
+                        <div style="background:#eef6f3; padding:12px; border-radius:8px; border-left:3px solid var(--brand);">
+                            <strong>Cara Menautkan Dokumen:</strong>
+                            <ol style="margin:5px 0 0 0; padding-left:18px; font-size:0.8rem; color:var(--ink);">
+                                <li>Buka menu <b>Matriks Audit</b> di sebelah kiri.</li>
+                                <li>Klik tombol <b>🔗 Tautkan Link</b> pada dokumen terkait.</li>
+                                <li>Tempelkan (paste) link Google Drive Anda.</li>
+                            </ol>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Page 2: Timeline Tahunan -->
+            <!-- Timeline Tahunan -->
             <section id="page-timeline" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
@@ -265,60 +266,34 @@
                 </div>
             </section>
 
-            <!-- Page 3: Matriks Audit Readiness -->
+            <!-- Matriks Audit Readiness -->
             <section id="page-audit" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
                         <h3 class="card-title">Matriks Kelengkapan Berkas Pemeriksaan (Audit Readiness)</h3>
-                        <button class="btn btn-outline" onclick="toggleLockRKPDes()" id="btn-lock-toggle">🔒 Kunci Data RKPDes</button>
+                        <div>
+                            <button class="btn btn-brand" onclick="tambahItemAudit()">+ Tambah Dokumen Audit</button>
+                            <button class="btn btn-outline" onclick="toggleLockRKPDes()" id="btn-lock-toggle">🔒 Kunci Data RKPDes</button>
+                        </div>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--muted);">Indikator pemeriksaan keberadaan fisik berkas perencanaan untuk pemeriksaan Inspektorat / BPKP.</p>
+                    <p style="font-size:0.85rem; color:var(--muted);">Klik tombol <b>🔗 Tautkan Link</b> untuk memasukkan link file Google Drive Word/PDF Anda ke aplikasi ini.</p>
                     <table>
                         <thead>
                             <tr>
                                 <th>Dokumen Persyaratan Wajib</th>
-                                <th>Keberadaan Berkas</th>
-                                <th>Status Kunci</th>
-                                <th>Aksi</th>
+                                <th>Status Berkas</th>
+                                <th>Tautan Google Drive</th>
+                                <th>Aksi Kelola</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>SK Tim Penyusun RKPDes</td>
-                                <td><span class="badge badge-success">Ada (Lengkap)</span></td>
-                                <td>Terkunci</td>
-                                <td><button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;">Lihat</button></td>
-                            </tr>
-                            <tr>
-                                <td>Berita Acara Musdus Per Dusun</td>
-                                <td><span class="badge badge-success">Ada (Lengkap)</span></td>
-                                <td>Terkunci</td>
-                                <td><button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;">Lihat</button></td>
-                            </tr>
-                            <tr>
-                                <td>Berita Acara Musrenbangdesa Perencanaan</td>
-                                <td><span class="badge badge-danger">Belum Ada</span></td>
-                                <td>Buka</td>
-                                <td><button class="btn btn-brand" style="padding:4px 8px; font-size:0.75rem;">+ Unggah</button></td>
-                            </tr>
-                            <tr>
-                                <td>Gambar Desain Teknis & RAB Kegiatan</td>
-                                <td><span class="badge badge-warn">Proses Penyusunan</span></td>
-                                <td>Buka</td>
-                                <td><button class="btn btn-brand" style="padding:4px 8px; font-size:0.75rem;">+ Unggah</button></td>
-                            </tr>
-                            <tr>
-                                <td>Perdes RKPDes Tahun Berjalan</td>
-                                <td><span class="badge badge-danger">Belum Ada</span></td>
-                                <td>Buka</td>
-                                <td><button class="btn btn-brand" style="padding:4px 8px; font-size:0.75rem;">+ Unggah</button></td>
-                            </tr>
+                        <tbody id="tb-audit">
+                            <!-- Rendered dynamically -->
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Page 4: Master SSH Desa -->
+            <!-- Master SSH Desa -->
             <section id="page-ssh" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
@@ -365,7 +340,7 @@
                 </div>
             </section>
 
-            <!-- Placeholder View untuk Menu Lainnya -->
+            <!-- Placeholder Generic -->
             <section id="page-generic" class="page-content hidden">
                 <div class="card-panel">
                     <h3 class="card-title" id="generic-title">Modul Perencanaan</h3>
@@ -375,23 +350,116 @@
         </main>
     </div>
 
-    <!-- Script Logika & Interaksi -->
+    <!-- Logic Script -->
     <script>
-        // Data State Aplikasi
+        // Default State Data
         let appState = {
             rkpLocked: false,
             lastBackup: new Date().toISOString(),
-            kegiatanCount: 1,
-            dokumenCount: 2
+            dokumenAudit: [
+                { id: 1, nama: "Folder Utama RKPDes (30 File)", status: "Belum Ada", link: "" },
+                { id: 2, nama: "1. COVER RKPDesa 2027", status: "Belum Ada", link: "" },
+                { id: 3, nama: "2. Perdes Nomor 2 Tahun 2026 ttg RKPDesa", status: "Belum Ada", link: "" },
+                { id: 4, nama: "3. SK Pengangkatan Tim Penyusun RKP Desa", status: "Belum Ada", link: "" },
+                { id: 5, nama: "4. DOKUMEN RKP DESA 2027", status: "Belum Ada", link: "" },
+                { id: 6, nama: "5. BA. Pembentukan Tim Penyusun RKP Desa", status: "Belum Ada", link: "" },
+                { id: 7, nama: "14-15. Gambar Desain dan RAB Kegiatan", status: "Belum Ada", link: "" },
+                { id: 8, nama: "30. BA. Musrenbang Desa RKP Desa", status: "Belum Ada", link: "" }
+            ]
         };
 
-        // Inisialisasi Aplikasi
         window.addEventListener('DOMContentLoaded', () => {
             loadLocalState();
+            renderAuditTable();
+            updateStats();
             checkBackupReminder();
         });
 
-        // Perpindahan Halaman
+        function renderAuditTable() {
+            const tbody = document.getElementById('tb-audit');
+            if(!tbody) return;
+            
+            tbody.innerHTML = appState.dokumenAudit.map(doc => {
+                const hasLink = doc.link && doc.link.trim() !== "";
+                return `
+                    <tr>
+                        <td><b>${doc.nama}</b></td>
+                        <td>
+                            <span class="badge ${hasLink ? 'badge-success' : 'badge-danger'}">
+                                ${hasLink ? 'Ada (Lengkap)' : 'Belum Ada'}
+                            </span>
+                        </td>
+                        <td>
+                            ${hasLink 
+                                ? `<span style="color:var(--brand); font-size:0.8rem;">✓ Tautan Aktif</span>` 
+                                : `<span style="color:var(--muted); font-size:0.8rem;">- Belum Ditautkan -</span>`}
+                        </td>
+                        <td style="display:flex; gap:6px;">
+                            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="tautkanLink(${doc.id})">
+                                🔗 ${hasLink ? 'Ubah Link' : 'Tautkan Link'}
+                            </button>
+                            ${hasLink ? `
+                                <button class="btn btn-brand" style="padding:4px 10px; font-size:0.75rem;" onclick="bukaLink('${doc.link}')">
+                                    ↗️ Buka File
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function tautkanLink(id) {
+            const doc = appState.dokumenAudit.find(d => d.id === id);
+            if (!doc) return;
+
+            const inputLink = prompt(`Tempelkan (Paste) Link Google Drive untuk:\n"${doc.nama}"`, doc.link || "");
+            
+            if (inputLink !== null) {
+                doc.link = inputLink.trim();
+                doc.status = doc.link !== "" ? "Ada (Lengkap)" : "Belum Ada";
+                saveLocalState();
+                renderAuditTable();
+                updateStats();
+                if(doc.link !== "") {
+                    alert("Link Google Drive berhasil ditautkan!");
+                }
+            }
+        }
+
+        function bukaLink(url) {
+            if (url) {
+                window.open(url, '_blank');
+            } else {
+                alert("Link belum dimasukkan.");
+            }
+        }
+
+        function tambahItemAudit() {
+            const nama = prompt("Masukkan Nama Dokumen Persyaratan Audit Baru:");
+            if (nama && nama.trim() !== "") {
+                const newId = appState.dokumenAudit.length ? Math.max(...appState.dokumenAudit.map(d => d.id)) + 1 : 1;
+                appState.dokumenAudit.push({
+                    id: newId,
+                    nama: nama.trim(),
+                    status: "Belum Ada",
+                    link: ""
+                });
+                saveLocalState();
+                renderAuditTable();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const total = appState.dokumenAudit.length;
+            const terisi = appState.dokumenAudit.filter(d => d.link && d.link.trim() !== "").length;
+            const persen = total > 0 ? Math.round((terisi / total) * 100) : 0;
+
+            document.getElementById('stat-dokumen').innerText = terisi;
+            document.getElementById('stat-kelengkapan').innerText = persen + "%";
+        }
+
         function switchPage(pageId) {
             document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -410,7 +478,6 @@
             }
         }
 
-        // Kunci Data RKPDes
         function toggleLockRKPDes() {
             appState.rkpLocked = !appState.rkpLocked;
             const statusVal = document.getElementById('stat-lock');
@@ -422,7 +489,7 @@
                 statusVal.style.color = "var(--danger)";
                 statusSub.innerText = "Aman dari Perubahan";
                 btnToggle.innerText = "🔓 Buka Kunci RKPDes";
-                alert("Data RKPDes berhasil dikunci untuk menjaga integritas audit.");
+                alert("Data RKPDes dikunci untuk menjaga integritas audit.");
             } else {
                 statusVal.innerText = "Buka";
                 statusVal.style.color = "var(--ink)";
@@ -433,7 +500,6 @@
             saveLocalState();
         }
 
-        // Backup ke JSON File
         function backupJSON() {
             appState.lastBackup = new Date().toISOString();
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
@@ -448,7 +514,6 @@
             saveLocalState();
         }
 
-        // Restore dari JSON File
         function restoreJSON() {
             const input = document.createElement('input');
             input.type = 'file';
@@ -472,8 +537,8 @@
             input.click();
         }
 
-        // Peringatan Backup Otomatis
         function checkBackupReminder() {
+            if(!appState.lastBackup) return;
             const last = new Date(appState.lastBackup);
             const now = new Date();
             const diffDays = Math.ceil((now - last) / (1000 * 60 * 60 * 24));
