@@ -48,7 +48,7 @@
         .btn-brand:hover { background: var(--brand2); }
         .btn-outline { background: #fff; border: 1px solid var(--line); color: var(--ink); }
         .btn-outline:hover { background: #f8fafb; }
-        .btn-warn { background: var(--warn); color: #fff; }
+        .btn-danger { background: var(--danger); color: #fff; }
 
         .select-filter { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.88rem; font-weight: 600; background: #fff; color: var(--ink); cursor: pointer; }
 
@@ -75,7 +75,7 @@
         .badge-danger { background: #ffebee; color: var(--danger); }
         
         .hidden { display: none !important; }
-        .filter-box { display: flex; align-items: center; gap: 10px; background: #f8fafb; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 15px; }
+        .filter-box { display: flex; align-items: center; gap: 10px; background: #f8fafb; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -116,6 +116,7 @@
                     <strong>Desa Kaduagung</strong> <span style="color:var(--muted); font-size:0.85rem;">• Kec. Karangkencana</span>
                 </div>
                 <div class="topbar-actions">
+                    <button class="btn btn-outline" onclick="resetDatabase()">🔄 Reset Data Awal</button>
                     <button class="btn btn-outline" onclick="restoreJSON()">Restore JSON</button>
                     <button class="btn btn-outline" onclick="backupJSON()">Backup JSON</button>
                 </div>
@@ -125,14 +126,14 @@
             <section id="page-dashboard" class="page-content">
                 <div class="banner">
                     <h2>Workspace Digital Kaur Perencanaan</h2>
-                    <p>Pusat pengarsipan dan tautan dokumen Google Drive terintegrasi per periode masa jabatan & per tahun anggaran.</p>
+                    <p>Pengarsipan dokumen terintegrasi Google Drive per periode RPJMDes dan per tahun RKPDes.</p>
                 </div>
                 
                 <div class="grid-stats" style="margin-top:20px;">
                     <div class="card-stat">
                         <small>Periode RPJMDes Aktif</small>
                         <div class="val" id="dash-rpjm-period">-</div>
-                        <div class="sub">Masa Jabatan Kades</div>
+                        <div class="sub">Masa Jabatan Kepala Desa</div>
                     </div>
                     <div class="card-stat">
                         <small>Tahun RKPDes Aktif</small>
@@ -142,7 +143,7 @@
                     <div class="card-stat">
                         <small>Kelengkapan RKPDes (<span id="dash-year-label"></span>)</small>
                         <div class="val" id="dash-rkp-progress">0%</div>
-                        <div class="sub">dokumen terhubung</div>
+                        <div class="sub">berkas terhubung</div>
                     </div>
                 </div>
 
@@ -150,39 +151,36 @@
                     <div class="card-panel">
                         <div class="card-header">
                             <h3 class="card-title">📕 RPJMDes (Per Periode)</h3>
-                            <button class="btn btn-brand" onclick="switchPage('rpjmdes')">Kelola RPJMDes</button>
+                            <button class="btn btn-brand" onclick="switchPage('rpjmdes')">Buka RPJMDes</button>
                         </div>
-                        <p style="font-size:0.88rem; color:var(--muted);">Kelola dokumen RPJMDes sesuai periode kepemimpinan Kepala Desa (8 Tahun). Pilih atau tambah periode baru.</p>
+                        <p style="font-size:0.88rem; color:var(--muted);">Kelola dokumen RPJMDes sesuai periode kepemimpinan. Bebas tambah periode jabatan baru.</p>
                     </div>
                     
                     <div class="card-panel">
                         <div class="card-header">
                             <h3 class="card-title">📘 RKPDes (Per Tahun)</h3>
-                            <button class="btn btn-brand" onclick="switchPage('rkpdes')">Kelola RKPDes</button>
+                            <button class="btn btn-brand" onclick="switchPage('rkpdes')">Buka RKPDes</button>
                         </div>
-                        <p style="font-size:0.88rem; color:var(--muted);">Kelola 30 dokumen syarat RKPDes per tahun anggaran. Bebas tambah tahun anggaran baru.</p>
+                        <p style="font-size:0.88rem; color:var(--muted);">Kelola 30 dokumen syarat RKPDes per tahun anggaran. Arsip tahun-tahun lalu tersimpan aman.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Halaman RPJMDes (Multi-Periode) -->
+            <!-- Halaman RPJMDes -->
             <section id="page-rpjmdes" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
-                        <h3 class="card-title">📕 Dokumen RPJMDes (Rencana Pembangunan Jangka Menengah Desa)</h3>
-                        <button class="btn btn-brand" onclick="tambahPeriodeRPJMDes()">+ Tambah Periode Jabatan Baru</button>
+                        <h3 class="card-title">📕 Dokumen RPJMDes (Per Periode Masa Jabatan)</h3>
+                        <button class="btn btn-brand" onclick="tambahPeriodeRPJMDes()">+ Tambah Periode Jabatan</button>
                     </div>
 
                     <div class="filter-box">
                         <label for="select-rpjm-period"><b>Pilih Periode RPJMDes:</b></label>
-                        <select id="select-rpjm-period" class="select-filter" onchange="gantiPeriodeRPJM(this.value)">
-                            <!-- Dynamic -->
-                        </select>
-                        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Arsip RPJMDes tetap aman saat pergantian Kades</span>
+                        <select id="select-rpjm-period" class="select-filter" onchange="gantiPeriodeRPJM(this.value)"></select>
                     </div>
 
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <span style="font-size:0.88rem; color:var(--muted);">Daftar Dokumen Utama RPJMDes Periode Ini:</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <span style="font-size:0.88rem; color:var(--muted);">Daftar Dokumen Utama RPJMDes:</span>
                         <button class="btn btn-outline" onclick="tambahItemRPJMDes()">+ Tambah Berkas Baru</button>
                     </div>
 
@@ -195,31 +193,26 @@
                                 <th>Aksi Dokumen</th>
                             </tr>
                         </thead>
-                        <tbody id="tb-rpjmdes">
-                            <!-- Dynamic -->
-                        </tbody>
+                        <tbody id="tb-rpjmdes"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Halaman RKPDes (Multi-Tahun) -->
+            <!-- Halaman RKPDes -->
             <section id="page-rkpdes" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
-                        <h3 class="card-title">📘 Dokumen RKPDes (Rencana Kerja Pemerintah Desa)</h3>
-                        <button class="btn btn-brand" onclick="tambahTahunRKPDes()">+ Tambah Tahun Anggaran Baru</button>
+                        <h3 class="card-title">📘 Dokumen RKPDes (Per Tahun Anggaran)</h3>
+                        <button class="btn btn-brand" onclick="tambahTahunRKPDes()">+ Tambah Tahun Anggaran</button>
                     </div>
 
                     <div class="filter-box">
                         <label for="select-rkp-year"><b>Pilih Tahun Anggaran RKPDes:</b></label>
-                        <select id="select-rkp-year" class="select-filter" onchange="gantiTahunRKP(this.value)">
-                            <!-- Dynamic -->
-                        </select>
-                        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Kelola 30 dokumen syarat terpisah per tahun</span>
+                        <select id="select-rkp-year" class="select-filter" onchange="gantiTahunRKP(this.value)"></select>
                     </div>
 
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <span style="font-size:0.88rem; color:var(--muted);">Daftar Berkas RKPDes Tahun Ini:</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <span style="font-size:0.88rem; color:var(--muted);">Daftar 30 Berkas Persyaratan RKPDes:</span>
                         <button class="btn btn-outline" onclick="tambahItemRKPDes()">+ Tambah Berkas Baru</button>
                     </div>
 
@@ -227,14 +220,12 @@
                         <thead>
                             <tr>
                                 <th style="width: 50px;">No</th>
-                                <th>Nama Dokumen RKPDes</th>
+                                <th>Nama Dokumen / Berkas RKPDes</th>
                                 <th>Status Link</th>
                                 <th>Aksi Dokumen</th>
                             </tr>
                         </thead>
-                        <tbody id="tb-rkpdes">
-                            <!-- Dynamic -->
-                        </tbody>
+                        <tbody id="tb-rkpdes"></tbody>
                     </table>
                 </div>
             </section>
@@ -243,9 +234,9 @@
             <section id="page-audit" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
-                        <h3 class="card-title">🛡️ Matriks Kelengkapan Berkas Pemeriksaan (Audit Readiness)</h3>
+                        <h3 class="card-title">🛡️ Matriks Audit Readiness</h3>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--muted);">Progres kelengkapan dokumen RKPDes tahun berjalan yang sudah ditautkan ke Google Drive.</p>
+                    <p style="font-size:0.85rem; color:var(--muted);">Status kelengkapan berkas RKPDes tahun berjalan yang siap diperiksa auditor.</p>
                     <table>
                         <thead>
                             <tr>
@@ -253,25 +244,22 @@
                                 <th>Status Kelengkapan</th>
                             </tr>
                         </thead>
-                        <tbody id="tb-audit">
-                            <!-- Dynamic -->
-                        </tbody>
+                        <tbody id="tb-audit"></tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Placeholder Lain -->
+            <!-- Generic Page -->
             <section id="page-generic" class="page-content hidden">
                 <div class="card-panel">
                     <h3 class="card-title" id="generic-title">Modul Perencanaan</h3>
-                    <p style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Fitur ini aktif dan siap dihubungkan dengan data internal Anda.</p>
+                    <p style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Fitur ini aktif dan siap digunakan.</p>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        // Templat 30 Berkas RKPDes Standar
         const defaultRKPFiles = [
             "1. COVER RKPDesa",
             "2. Perdes ttg RKPDesa",
@@ -303,7 +291,6 @@
             "30. BA. Musrenbang Desa RKP Desa"
         ];
 
-        // Templat Berkas RPJMDes Standar
         const defaultRPJMFiles = [
             "1. Dokumen Utama RPJMDes",
             "2. Perdes RPJMDes Sah",
@@ -314,23 +301,64 @@
             "7. Berita Acara Pengesahan BPD"
         ];
 
-        // Initial State
-        let appState = {
-            activeRpjmPeriod: "2020 - 2028",
-            rpjmData: {
-                "2020 - 2028": defaultRPJMFiles.map((nama, i) => ({ id: i + 1, nama: nama, link: "" }))
-            },
-            activeRkpYear: "2027",
-            rkpData: {
-                "2027": defaultRKPFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} 2027`, link: "" }))
-            }
-        };
+        function createInitialState() {
+            return {
+                version: 3,
+                activeRpjmPeriod: "2020 - 2028",
+                rpjmData: {
+                    "2020 - 2028": defaultRPJMFiles.map((nama, i) => ({ id: i + 1, nama: nama, link: "" }))
+                },
+                activeRkpYear: "2027",
+                rkpData: {
+                    "2027": defaultRKPFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} 2027`, link: "" }))
+                }
+            };
+        }
+
+        let appState = createInitialState();
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadLocalState();
+            loadAndFixState();
             initDropdowns();
             renderAll();
         });
+
+        function loadAndFixState() {
+            const saved = localStorage.getItem('kaper_desa_v3_db');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && parsed.version === 3 && parsed.rkpData && parsed.rpjmData) {
+                        appState = parsed;
+                    } else {
+                        appState = createInitialState();
+                        saveLocalState();
+                    }
+                } catch(e) {
+                    appState = createInitialState();
+                    saveLocalState();
+                }
+            } else {
+                saveLocalState();
+            }
+        }
+
+        function saveLocalState() {
+            localStorage.setItem('kaper_desa_v3_db', JSON.stringify(appState));
+        }
+
+        function resetDatabase() {
+            if (confirm("Reset seluruh data ke kondisi awal (30 berkas RKPDes)?")) {
+                localStorage.removeItem('kaper_desa_v3_db');
+                localStorage.removeItem('kaper_desa_v2_db');
+                localStorage.removeItem('kaper_desa_db');
+                appState = createInitialState();
+                saveLocalState();
+                initDropdowns();
+                renderAll();
+                alert("Data berhasil direset!");
+            }
+        }
 
         function renderAll() {
             renderRPJMTable();
@@ -339,17 +367,20 @@
             updateDashboard();
         }
 
-        // --- MANAJEMEN RPJMDES (MULTI PERIODE) ---
         function initDropdowns() {
             const selectRPJM = document.getElementById('select-rpjm-period');
-            selectRPJM.innerHTML = Object.keys(appState.rpjmData).map(p => 
-                `<option value="${p}" ${p === appState.activeRpjmPeriod ? 'selected' : ''}>Periode ${p}</option>`
-            ).join('');
+            if(selectRPJM) {
+                selectRPJM.innerHTML = Object.keys(appState.rpjmData).map(p => 
+                    `<option value="${p}" ${p === appState.activeRpjmPeriod ? 'selected' : ''}>Periode ${p}</option>`
+                ).join('');
+            }
 
             const selectRKP = document.getElementById('select-rkp-year');
-            selectRKP.innerHTML = Object.keys(appState.rkpData).map(y => 
-                `<option value="${y}" ${y === appState.activeRkpYear ? 'selected' : ''}>Tahun Anggaran ${y}</option>`
-            ).join('');
+            if(selectRKP) {
+                selectRKP.innerHTML = Object.keys(appState.rkpData).map(y => 
+                    `<option value="${y}" ${y === appState.activeRkpYear ? 'selected' : ''}>Tahun Anggaran ${y}</option>`
+                ).join('');
+            }
         }
 
         function gantiPeriodeRPJM(periode) {
@@ -376,6 +407,7 @@
 
         function renderRPJMTable() {
             const tbody = document.getElementById('tb-rpjmdes');
+            if(!tbody) return;
             const docs = appState.rpjmData[appState.activeRpjmPeriod] || [];
 
             tbody.innerHTML = docs.map((doc, idx) => {
@@ -424,7 +456,6 @@
             }
         }
 
-        // --- MANAJEMEN RKPDES (MULTI TAHUN) ---
         function gantiTahunRKP(tahun) {
             appState.activeRkpYear = tahun;
             saveLocalState();
@@ -451,7 +482,13 @@
 
         function renderRKPTable() {
             const tbody = document.getElementById('tb-rkpdes');
+            if(!tbody) return;
             const docs = appState.rkpData[appState.activeRkpYear] || [];
+
+            if (docs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--muted);">Tidak ada dokumen RKPDes. Klik tombol "+ Tambah Berkas Baru".</td></tr>`;
+                return;
+            }
 
             tbody.innerHTML = docs.map((doc, idx) => {
                 const hasLink = doc.link && doc.link.trim() !== "";
@@ -505,6 +542,7 @@
 
         function renderAuditTable() {
             const tbody = document.getElementById('tb-audit');
+            if(!tbody) return;
             const docs = appState.rkpData[appState.activeRkpYear] || [];
 
             tbody.innerHTML = docs.map(doc => {
@@ -523,16 +561,22 @@
         }
 
         function updateDashboard() {
-            document.getElementById('dash-rpjm-period').innerText = appState.activeRpjmPeriod;
-            document.getElementById('dash-rkp-year').innerText = appState.activeRkpYear;
-            document.getElementById('dash-year-label').innerText = appState.activeRkpYear;
+            const rpjmVal = document.getElementById('dash-rpjm-period');
+            if(rpjmVal) rpjmVal.innerText = appState.activeRpjmPeriod;
+
+            const rkpVal = document.getElementById('dash-rkp-year');
+            if(rkpVal) rkpVal.innerText = appState.activeRkpYear;
+
+            const yearLbl = document.getElementById('dash-year-label');
+            if(yearLbl) yearLbl.innerText = appState.activeRkpYear;
 
             const docs = appState.rkpData[appState.activeRkpYear] || [];
             const terisi = docs.filter(d => d.link && d.link.trim() !== "").length;
             const total = docs.length;
             const persen = total > 0 ? Math.round((terisi / total) * 100) : 0;
 
-            document.getElementById('dash-rkp-progress').innerText = persen + "%";
+            const progressVal = document.getElementById('dash-rkp-progress');
+            if(progressVal) progressVal.innerText = persen + "%";
         }
 
         function switchPage(pageId) {
@@ -550,19 +594,6 @@
 
             const activeBtn = document.getElementById(`btn-nav-${pageId}`);
             if (activeBtn) activeBtn.classList.add('active');
-        }
-
-        function saveLocalState() {
-            localStorage.setItem('kaper_desa_v2_db', JSON.stringify(appState));
-        }
-
-        function loadLocalState() {
-            const saved = localStorage.getItem('kaper_desa_v2_db');
-            if (saved) {
-                try {
-                    appState = JSON.parse(saved);
-                } catch(e) {}
-            }
         }
 
         function backupJSON() {
