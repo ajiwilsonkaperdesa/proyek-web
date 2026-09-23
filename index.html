@@ -43,15 +43,16 @@
         .topbar { display: flex; justify-content: space-between; align-items: center; background: var(--panel); padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
         .topbar-actions { display: flex; gap: 10px; }
         
-        .btn { padding: 9px 16px; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn { padding: 8px 14px; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
         .btn-brand { background: var(--brand); color: #fff; }
         .btn-brand:hover { background: var(--brand2); }
         .btn-outline { background: #fff; border: 1px solid var(--line); color: var(--ink); }
         .btn-outline:hover { background: #f8fafb; }
-        .btn-danger { background: var(--danger); color: #fff; }
         .btn-warn { background: var(--warn); color: #fff; }
 
-        .banner { background: linear-gradient(135deg, var(--brand), var(--brand2)); color: #fff; padding: 25px; border-radius: 16px; position: relative; }
+        .select-filter { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.88rem; font-weight: 600; background: #fff; color: var(--ink); cursor: pointer; }
+
+        .banner { background: linear-gradient(135deg, var(--brand), var(--brand2)); color: #fff; padding: 25px; border-radius: 16px; }
         .banner h2 { margin: 0 0 8px 0; font-size: 1.4rem; }
         .banner p { margin: 0; opacity: 0.9; font-size: 0.9rem; }
         
@@ -62,7 +63,7 @@
         .card-stat .sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
         
         .card-panel { background: var(--panel); padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .card-title { font-weight: bold; font-size: 1rem; margin: 0; }
         
         table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
@@ -71,19 +72,10 @@
         
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
         .badge-success { background: #e8f5e9; color: var(--success); }
-        .badge-warn { background: #fff3e0; color: var(--warn); }
         .badge-danger { background: #ffebee; color: var(--danger); }
         
-        .alert-bar { background: #fff8e1; border-left: 4px solid var(--accent); padding: 12px 16px; border-radius: 6px; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-
         .hidden { display: none !important; }
-
-        @media print {
-            .sidebar, .topbar, .btn, .no-print { display: none !important; }
-            .main { padding: 0; }
-            body { background: #fff; }
-            .card-panel { box-shadow: none; padding: 0; }
-        }
+        .filter-box { display: flex; align-items: center; gap: 10px; background: #f8fafb; padding: 10px 14px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -126,150 +118,134 @@
                 <div class="topbar-actions">
                     <button class="btn btn-outline" onclick="restoreJSON()">Restore JSON</button>
                     <button class="btn btn-outline" onclick="backupJSON()">Backup JSON</button>
-                    <button class="btn btn-brand" onclick="bukaModalKegiatan()">+ Kegiatan</button>
                 </div>
             </header>
-
-            <div id="backupAlert" class="alert-bar hidden">
-                <span>⚠️ <b>Pengingat Pengamanan Data:</b> Amankan data perencanaan Anda dengan mengunduh berkas cadangan terbaru.</span>
-                <button class="btn btn-warn" onclick="backupJSON()">Backup Sekarang</button>
-            </div>
 
             <!-- Dashboard View -->
             <section id="page-dashboard" class="page-content">
                 <div class="banner">
                     <h2>Workspace Digital Kaur Perencanaan</h2>
-                    <p>Input data sekali, kelola seluruh siklus perencanaan, kelengkapan berkas audit, dan pengarsipan dari satu tempat.</p>
+                    <p>Pusat pengarsipan dan tautan dokumen Google Drive terintegrasi per periode masa jabatan & per tahun anggaran.</p>
                 </div>
                 
                 <div class="grid-stats" style="margin-top:20px;">
                     <div class="card-stat">
-                        <small>Total Dokumen RKPDes</small>
-                        <div class="val" id="stat-total-rkpdes">30</div>
-                        <div class="sub">persyaratan dokumen</div>
+                        <small>Periode RPJMDes Aktif</small>
+                        <div class="val" id="dash-rpjm-period">-</div>
+                        <div class="sub">Masa Jabatan Kades</div>
                     </div>
                     <div class="card-stat">
-                        <small>Dokumen Terhubung</small>
-                        <div class="val" id="stat-dokumen">0</div>
-                        <div class="sub">link Google Drive aktif</div>
+                        <small>Tahun RKPDes Aktif</small>
+                        <div class="val" id="dash-rkp-year">-</div>
+                        <div class="sub">Tahun Anggaran Berjalan</div>
                     </div>
                     <div class="card-stat">
-                        <small>Kelengkapan RKPDes</small>
-                        <div class="val" id="stat-kelengkapan">0%</div>
-                        <div class="sub">berkas yang tertaut</div>
-                    </div>
-                    <div class="card-stat">
-                        <small>Status RKPDes</small>
-                        <div class="val" id="stat-lock">Buka</div>
-                        <div class="sub" id="stat-lock-sub">Dapat Diedit</div>
+                        <small>Kelengkapan RKPDes (<span id="dash-year-label"></span>)</small>
+                        <div class="val" id="dash-rkp-progress">0%</div>
+                        <div class="sub">dokumen terhubung</div>
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 2fr 1fr; gap:20px; margin-top:20px;">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
                     <div class="card-panel">
                         <div class="card-header">
-                            <h3 class="card-title">Aktivitas Perencanaan</h3>
-                            <button class="btn btn-outline" onclick="switchPage('rkpdes')">Buka RKPDes</button>
+                            <h3 class="card-title">📕 RPJMDes (Per Periode)</h3>
+                            <button class="btn btn-brand" onclick="switchPage('rpjmdes')">Kelola RPJMDes</button>
                         </div>
-                        <p style="font-size:0.88rem; color:var(--muted);">Seluruh 30 berkas RKPDes siap dihubungkan langsung dari Google Drive kamu.</p>
+                        <p style="font-size:0.88rem; color:var(--muted);">Kelola dokumen RPJMDes sesuai periode kepemimpinan Kepala Desa (8 Tahun). Pilih atau tambah periode baru.</p>
                     </div>
                     
                     <div class="card-panel">
                         <div class="card-header">
-                            <h3 class="card-title">Petunjuk Penggunaan</h3>
+                            <h3 class="card-title">📘 RKPDes (Per Tahun)</h3>
+                            <button class="btn btn-brand" onclick="switchPage('rkpdes')">Kelola RKPDes</button>
                         </div>
-                        <div style="background:#eef6f3; padding:12px; border-radius:8px; border-left:3px solid var(--brand);">
-                            <strong>Cara Kelola RKPDes:</strong>
-                            <ol style="margin:5px 0 0 0; padding-left:18px; font-size:0.8rem; color:var(--ink);">
-                                <li>Buka menu <b>RKPDes</b> di sidebar kiri.</li>
-                                <li>Pilih berkas lalu klik <b>🔗 Tautkan Link</b>.</li>
-                                <li>Paste link Google Drive per berkas.</li>
-                            </ol>
-                        </div>
+                        <p style="font-size:0.88rem; color:var(--muted);">Kelola 30 dokumen syarat RKPDes per tahun anggaran. Bebas tambah tahun anggaran baru.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- Halaman RKPDes (30 Berkas dari Drive) -->
-            <section id="page-rkpdes" class="page-content hidden">
+            <!-- Halaman RPJMDes (Multi-Periode) -->
+            <section id="page-rpjmdes" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
-                        <h3 class="card-title">Pengadministrasian Dokumen RKPDes</h3>
-                        <div>
-                            <button class="btn btn-brand" onclick="tambahItemRKPDes()">+ Tambah Berkas Baru</button>
-                            <button class="btn btn-outline" onclick="toggleLockRKPDes()" id="btn-lock-toggle">🔒 Kunci RKPDes</button>
-                        </div>
+                        <h3 class="card-title">📕 Dokumen RPJMDes (Rencana Pembangunan Jangka Menengah Desa)</h3>
+                        <button class="btn btn-brand" onclick="tambahPeriodeRPJMDes()">+ Tambah Periode Jabatan Baru</button>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--muted);">Daftar 30 berkas RKPDes. Klik tombol <b>🔗 Tautkan Link</b> untuk memasukkan link Google Drive masing-masing file.</p>
+
+                    <div class="filter-box">
+                        <label for="select-rpjm-period"><b>Pilih Periode RPJMDes:</b></label>
+                        <select id="select-rpjm-period" class="select-filter" onchange="gantiPeriodeRPJM(this.value)">
+                            <!-- Dynamic -->
+                        </select>
+                        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Arsip RPJMDes tetap aman saat pergantian Kades</span>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="font-size:0.88rem; color:var(--muted);">Daftar Dokumen Utama RPJMDes Periode Ini:</span>
+                        <button class="btn btn-outline" onclick="tambahItemRPJMDes()">+ Tambah Berkas Baru</button>
+                    </div>
+
                     <table>
                         <thead>
                             <tr>
                                 <th style="width: 50px;">No</th>
-                                <th>Nama Dokumen / Berkas RKPDes</th>
+                                <th>Nama Dokumen RPJMDes</th>
+                                <th>Status Link</th>
+                                <th>Aksi Dokumen</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb-rpjmdes">
+                            <!-- Dynamic -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Halaman RKPDes (Multi-Tahun) -->
+            <section id="page-rkpdes" class="page-content hidden">
+                <div class="card-panel">
+                    <div class="card-header">
+                        <h3 class="card-title">📘 Dokumen RKPDes (Rencana Kerja Pemerintah Desa)</h3>
+                        <button class="btn btn-brand" onclick="tambahTahunRKPDes()">+ Tambah Tahun Anggaran Baru</button>
+                    </div>
+
+                    <div class="filter-box">
+                        <label for="select-rkp-year"><b>Pilih Tahun Anggaran RKPDes:</b></label>
+                        <select id="select-rkp-year" class="select-filter" onchange="gantiTahunRKP(this.value)">
+                            <!-- Dynamic -->
+                        </select>
+                        <span style="color:var(--muted); font-size:0.8rem; margin-left:auto;">Kelola 30 dokumen syarat terpisah per tahun</span>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="font-size:0.88rem; color:var(--muted);">Daftar Berkas RKPDes Tahun Ini:</span>
+                        <button class="btn btn-outline" onclick="tambahItemRKPDes()">+ Tambah Berkas Baru</button>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">No</th>
+                                <th>Nama Dokumen RKPDes</th>
                                 <th>Status Link</th>
                                 <th>Aksi Dokumen</th>
                             </tr>
                         </thead>
                         <tbody id="tb-rkpdes">
-                            <!-- Dynamically generated -->
+                            <!-- Dynamic -->
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Timeline Tahunan -->
-            <section id="page-timeline" class="page-content hidden">
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h3 class="card-title">Siklus & Agenda Kerja Tahunan Kaur Perencanaan</h3>
-                        <button class="btn btn-outline" onclick="window.print()">🖨️ Cetak Jadwal</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Bulan</th>
-                                <th>Tahapan Kegiatan</th>
-                                <th>Output / Dokumen Wajib</th>
-                                <th>Status Siklus</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><b>Juni - Juli</b></td>
-                                <td>Pembentukan Tim Penyusun RKPDes & Pencermatan RPJMDes</td>
-                                <td>SK Kepala Desa tentang Tim Penyusun RKPDes</td>
-                                <td><span class="badge badge-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td><b>Juli - Agustus</b></td>
-                                <td>Musyawarah Dusun (Musdus) & Musdes Perencanaan</td>
-                                <td>Berita Acara Musdus & Daftar Usulan Warga</td>
-                                <td><span class="badge badge-success">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td><b>September</b></td>
-                                <td>Penyusunan Draft RKPDes & Musrenbangdesa</td>
-                                <td>Berita Acara Musrenbangdesa & Matriks RKPDes</td>
-                                <td><span class="badge badge-warn">Berlangsung</span></td>
-                            </tr>
-                            <tr>
-                                <td><b>Oktober</b></td>
-                                <td>Penetapan Perdes RKPDes</td>
-                                <td>Dokumen Perdes RKPDes Sah</td>
-                                <td><span class="badge badge-danger">Belum</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Matriks Audit Readiness -->
+            <!-- Matriks Audit -->
             <section id="page-audit" class="page-content hidden">
                 <div class="card-panel">
                     <div class="card-header">
-                        <h3 class="card-title">Matriks Kelengkapan Berkas Pemeriksaan (Audit Readiness)</h3>
+                        <h3 class="card-title">🛡️ Matriks Kelengkapan Berkas Pemeriksaan (Audit Readiness)</h3>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--muted);">Progres kelengkapan dokumen yang sudah ditautkan dari menu RKPDes.</p>
+                    <p style="font-size:0.85rem; color:var(--muted);">Progres kelengkapan dokumen RKPDes tahun berjalan yang sudah ditautkan ke Google Drive.</p>
                     <table>
                         <thead>
                             <tr>
@@ -278,55 +254,29 @@
                             </tr>
                         </thead>
                         <tbody id="tb-audit">
-                            <!-- Generated dynamically -->
+                            <!-- Dynamic -->
                         </tbody>
                     </table>
                 </div>
             </section>
 
-            <!-- Master SSH Desa -->
-            <section id="page-ssh" class="page-content hidden">
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h3 class="card-title">Master Standar Satuan Harga (SSH) Desa</h3>
-                        <button class="btn btn-brand" onclick="tambahSSH()">+ Tambah Material/Upah</button>
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Kode Barang/Upah</th>
-                                <th>Uraian Material / Pekerjaan</th>
-                                <th>Satuan</th>
-                                <th>Harga Satuan (Rp)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tb-ssh">
-                            <tr><td>SSH-001</td><td>Semen Portland (50kg)</td><td>Sak</td><td>Rp 75.000</td></tr>
-                            <tr><td>SSH-002</td><td>Pasir Pasang / Pasir Beton</td><td>M3</td><td>Rp 220.000</td></tr>
-                            <tr><td>SSH-003</td><td>Tukang Bangunan Lintas Bidang</td><td>OH</td><td>Rp 120.000</td></tr>
-                            <tr><td>SSH-004</td><td>Pekerja / Pekerja Lokal Desa</td><td>OH</td><td>Rp 90.000</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- Placeholder Generic -->
+            <!-- Placeholder Lain -->
             <section id="page-generic" class="page-content hidden">
                 <div class="card-panel">
                     <h3 class="card-title" id="generic-title">Modul Perencanaan</h3>
-                    <p style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Modul ini terhubung langsung dengan basis data lokal Anda.</p>
+                    <p style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Fitur ini aktif dan siap dihubungkan dengan data internal Anda.</p>
                 </div>
             </section>
         </main>
     </div>
 
     <script>
-        // Data 30 File RKPDes dari Google Drive
-        const defaultFiles = [
-            "1. COVER RKPDesa 2027",
-            "2. Perdes Nomor 2 Tahun 2026 ttg RKPDesa",
+        // Templat 30 Berkas RKPDes Standar
+        const defaultRKPFiles = [
+            "1. COVER RKPDesa",
+            "2. Perdes ttg RKPDesa",
             "3. SK Pengangkatan Tim Penyusun RKP Desa",
-            "4. DOKUMEN RKP DESA 2027",
+            "4. DOKUMEN RKP DESA",
             "5. BA. Pembentukan Tim Penyusun RKP Desa",
             "6. RKTL_RKP Desa",
             "7. Daftar Rencana Program & Kegiatan yg Masuk ke Desa",
@@ -339,11 +289,11 @@
             "14-15. Gambar Desain dan RAB Kegiatan",
             "16. DU RKP Desa",
             "17. BA. Hasil Penyusunan Rancangan RKP Desa",
-            "18. Kpts BPD Musdes Perencanaan Desa 2027",
+            "18. Kpts BPD Musdes Perencanaan Desa",
             "19. BA, Musdes Perencanaan Desa",
-            "20. SK Panitia Musrenbang RKP Desa 2027",
-            "21. Pandangan Resmi BPD RKP Desa 2027",
-            "23. SK Panitia Musdes Pengesahan RKP Desa 2023",
+            "20. SK Panitia Musrenbang RKP Desa",
+            "21. Pandangan Resmi BPD RKP Desa",
+            "23. SK Panitia Musdes Pengesahan RKP Desa",
             "24. Tata Tertib Musrenbang RKP Desa",
             "25. BA, Musdes Pengesahan RKP Desa",
             "26. Daftar RKP Desa",
@@ -353,29 +303,82 @@
             "30. BA. Musrenbang Desa RKP Desa"
         ];
 
+        // Templat Berkas RPJMDes Standar
+        const defaultRPJMFiles = [
+            "1. Dokumen Utama RPJMDes",
+            "2. Perdes RPJMDes Sah",
+            "3. SK Tim Penyusun RPJMDes",
+            "4. Berita Acara Musdes RPJMDes",
+            "5. Peta Masalah & Potensi Desa",
+            "6. Matriks Rencana Kerja 8 Tahun",
+            "7. Berita Acara Pengesahan BPD"
+        ];
+
+        // Initial State
         let appState = {
-            rkpLocked: false,
-            lastBackup: new Date().toISOString(),
-            rkpdesDocs: defaultFiles.map((nama, idx) => ({
-                id: idx + 1,
-                nama: nama,
-                link: ""
-            }))
+            activeRpjmPeriod: "2020 - 2028",
+            rpjmData: {
+                "2020 - 2028": defaultRPJMFiles.map((nama, i) => ({ id: i + 1, nama: nama, link: "" }))
+            },
+            activeRkpYear: "2027",
+            rkpData: {
+                "2027": defaultRKPFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} 2027`, link: "" }))
+            }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
             loadLocalState();
-            renderRKPDesTable();
-            renderAuditTable();
-            updateStats();
-            checkBackupReminder();
+            initDropdowns();
+            renderAll();
         });
 
-        function renderRKPDesTable() {
-            const tbody = document.getElementById('tb-rkpdes');
-            if(!tbody) return;
-            
-            tbody.innerHTML = appState.rkpdesDocs.map((doc, idx) => {
+        function renderAll() {
+            renderRPJMTable();
+            renderRKPTable();
+            renderAuditTable();
+            updateDashboard();
+        }
+
+        // --- MANAJEMEN RPJMDES (MULTI PERIODE) ---
+        function initDropdowns() {
+            const selectRPJM = document.getElementById('select-rpjm-period');
+            selectRPJM.innerHTML = Object.keys(appState.rpjmData).map(p => 
+                `<option value="${p}" ${p === appState.activeRpjmPeriod ? 'selected' : ''}>Periode ${p}</option>`
+            ).join('');
+
+            const selectRKP = document.getElementById('select-rkp-year');
+            selectRKP.innerHTML = Object.keys(appState.rkpData).map(y => 
+                `<option value="${y}" ${y === appState.activeRkpYear ? 'selected' : ''}>Tahun Anggaran ${y}</option>`
+            ).join('');
+        }
+
+        function gantiPeriodeRPJM(periode) {
+            appState.activeRpjmPeriod = periode;
+            saveLocalState();
+            renderRPJMTable();
+            updateDashboard();
+        }
+
+        function tambahPeriodeRPJMDes() {
+            const periodeBaru = prompt("Masukkan Periode Masa Jabatan Baru (Contoh: 2028 - 2036):");
+            if (periodeBaru && periodeBaru.trim() !== "") {
+                const key = periodeBaru.trim();
+                if (!appState.rpjmData[key]) {
+                    appState.rpjmData[key] = defaultRPJMFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} (${key})`, link: "" }));
+                }
+                appState.activeRpjmPeriod = key;
+                saveLocalState();
+                initDropdowns();
+                renderRPJMTable();
+                updateDashboard();
+            }
+        }
+
+        function renderRPJMTable() {
+            const tbody = document.getElementById('tb-rpjmdes');
+            const docs = appState.rpjmData[appState.activeRpjmPeriod] || [];
+
+            tbody.innerHTML = docs.map((doc, idx) => {
                 const hasLink = doc.link && doc.link.trim() !== "";
                 return `
                     <tr>
@@ -387,25 +390,124 @@
                             </span>
                         </td>
                         <td style="display:flex; gap:6px;">
-                            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="tautkanLinkRKPDes(${doc.id})">
+                            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="tautkanLinkRPJM(${doc.id})">
                                 🔗 ${hasLink ? 'Ubah Link' : 'Tautkan Link'}
                             </button>
-                            ${hasLink ? `
-                                <button class="btn btn-brand" style="padding:4px 10px; font-size:0.75rem;" onclick="bukaLink('${doc.link}')">
-                                    ↗️ Buka File
-                                </button>
-                            ` : ''}
+                            ${hasLink ? `<button class="btn btn-brand" style="padding:4px 10px; font-size:0.75rem;" onclick="window.open('${doc.link}', '_blank')">↗️ Buka</button>` : ''}
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
+        function tautkanLinkRPJM(id) {
+            const docs = appState.rpjmData[appState.activeRpjmPeriod];
+            const doc = docs.find(d => d.id === id);
+            if (!doc) return;
+
+            const inputLink = prompt(`Tempelkan (Paste) Link Google Drive untuk:\n"${doc.nama}"`, doc.link || "");
+            if (inputLink !== null) {
+                doc.link = inputLink.trim();
+                saveLocalState();
+                renderRPJMTable();
+            }
+        }
+
+        function tambahItemRPJMDes() {
+            const nama = prompt("Masukkan Nama Berkas RPJMDes Baru:");
+            if (nama && nama.trim() !== "") {
+                const docs = appState.rpjmData[appState.activeRpjmPeriod];
+                const newId = docs.length ? Math.max(...docs.map(d => d.id)) + 1 : 1;
+                docs.push({ id: newId, nama: nama.trim(), link: "" });
+                saveLocalState();
+                renderRPJMTable();
+            }
+        }
+
+        // --- MANAJEMEN RKPDES (MULTI TAHUN) ---
+        function gantiTahunRKP(tahun) {
+            appState.activeRkpYear = tahun;
+            saveLocalState();
+            renderRKPTable();
+            renderAuditTable();
+            updateDashboard();
+        }
+
+        function tambahTahunRKPDes() {
+            const tahunBaru = prompt("Masukkan Tahun Anggaran Baru (Contoh: 2028):");
+            if (tahunBaru && tahunBaru.trim() !== "") {
+                const key = tahunBaru.trim();
+                if (!appState.rkpData[key]) {
+                    appState.rkpData[key] = defaultRKPFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} ${key}`, link: "" }));
+                }
+                appState.activeRkpYear = key;
+                saveLocalState();
+                initDropdowns();
+                renderRKPTable();
+                renderAuditTable();
+                updateDashboard();
+            }
+        }
+
+        function renderRKPTable() {
+            const tbody = document.getElementById('tb-rkpdes');
+            const docs = appState.rkpData[appState.activeRkpYear] || [];
+
+            tbody.innerHTML = docs.map((doc, idx) => {
+                const hasLink = doc.link && doc.link.trim() !== "";
+                return `
+                    <tr>
+                        <td><b>${idx + 1}</b></td>
+                        <td><b>${doc.nama}</b></td>
+                        <td>
+                            <span class="badge ${hasLink ? 'badge-success' : 'badge-danger'}">
+                                ${hasLink ? 'Telah Ditautkan' : 'Belum Ada Link'}
+                            </span>
+                        </td>
+                        <td style="display:flex; gap:6px;">
+                            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="tautkanLinkRKP(${doc.id})">
+                                🔗 ${hasLink ? 'Ubah Link' : 'Tautkan Link'}
+                            </button>
+                            ${hasLink ? `<button class="btn btn-brand" style="padding:4px 10px; font-size:0.75rem;" onclick="window.open('${doc.link}', '_blank')">↗️ Buka</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function tautkanLinkRKP(id) {
+            const docs = appState.rkpData[appState.activeRkpYear];
+            const doc = docs.find(d => d.id === id);
+            if (!doc) return;
+
+            const inputLink = prompt(`Tempelkan (Paste) Link Google Drive untuk:\n"${doc.nama}"`, doc.link || "");
+            if (inputLink !== null) {
+                doc.link = inputLink.trim();
+                saveLocalState();
+                renderRKPTable();
+                renderAuditTable();
+                updateDashboard();
+            }
+        }
+
+        function tambahItemRKPDes() {
+            const nama = prompt("Masukkan Nama Berkas RKPDes Baru:");
+            if (nama && nama.trim() !== "") {
+                const docs = appState.rkpData[appState.activeRkpYear];
+                const newId = docs.length ? Math.max(...docs.map(d => d.id)) + 1 : 1;
+                docs.push({ id: newId, nama: nama.trim(), link: "" });
+                saveLocalState();
+                renderRKPTable();
+                renderAuditTable();
+                updateDashboard();
+            }
+        }
+
         function renderAuditTable() {
             const tbody = document.getElementById('tb-audit');
-            if(!tbody) return;
+            const docs = appState.rkpData[appState.activeRkpYear] || [];
 
-            tbody.innerHTML = appState.rkpdesDocs.map(doc => {
+            tbody.innerHTML = docs.map(doc => {
                 const hasLink = doc.link && doc.link.trim() !== "";
                 return `
                     <tr>
@@ -420,56 +522,17 @@
             }).join('');
         }
 
-        function tautkanLinkRKPDes(id) {
-            const doc = appState.rkpdesDocs.find(d => d.id === id);
-            if (!doc) return;
+        function updateDashboard() {
+            document.getElementById('dash-rpjm-period').innerText = appState.activeRpjmPeriod;
+            document.getElementById('dash-rkp-year').innerText = appState.activeRkpYear;
+            document.getElementById('dash-year-label').innerText = appState.activeRkpYear;
 
-            const inputLink = prompt(`Tempelkan (Paste) Link Google Drive untuk berkas:\n"${doc.nama}"`, doc.link || "");
-            
-            if (inputLink !== null) {
-                doc.link = inputLink.trim();
-                saveLocalState();
-                renderRKPDesTable();
-                renderAuditTable();
-                updateStats();
-                if(doc.link !== "") {
-                    alert("Link berhasil disimpan!");
-                }
-            }
-        }
-
-        function bukaLink(url) {
-            if (url) {
-                window.open(url, '_blank');
-            } else {
-                alert("Link belum dimasukkan.");
-            }
-        }
-
-        function tambahItemRKPDes() {
-            const nama = prompt("Masukkan Nama Berkas RKPDes Baru:");
-            if (nama && nama.trim() !== "") {
-                const newId = appState.rkpdesDocs.length ? Math.max(...appState.rkpdesDocs.map(d => d.id)) + 1 : 1;
-                appState.rkpdesDocs.push({
-                    id: newId,
-                    nama: nama.trim(),
-                    link: ""
-                });
-                saveLocalState();
-                renderRKPDesTable();
-                renderAuditTable();
-                updateStats();
-            }
-        }
-
-        function updateStats() {
-            const total = appState.rkpdesDocs.length;
-            const terisi = appState.rkpdesDocs.filter(d => d.link && d.link.trim() !== "").length;
+            const docs = appState.rkpData[appState.activeRkpYear] || [];
+            const terisi = docs.filter(d => d.link && d.link.trim() !== "").length;
+            const total = docs.length;
             const persen = total > 0 ? Math.round((terisi / total) * 100) : 0;
 
-            document.getElementById('stat-total-rkpdes').innerText = total;
-            document.getElementById('stat-dokumen').innerText = terisi;
-            document.getElementById('stat-kelengkapan').innerText = persen + "%";
+            document.getElementById('dash-rkp-progress').innerText = persen + "%";
         }
 
         function switchPage(pageId) {
@@ -489,40 +552,27 @@
             if (activeBtn) activeBtn.classList.add('active');
         }
 
-        function toggleLockRKPDes() {
-            appState.rkpLocked = !appState.rkpLocked;
-            const statusVal = document.getElementById('stat-lock');
-            const statusSub = document.getElementById('stat-lock-sub');
-            const btnToggle = document.getElementById('btn-lock-toggle');
+        function saveLocalState() {
+            localStorage.setItem('kaper_desa_v2_db', JSON.stringify(appState));
+        }
 
-            if (appState.rkpLocked) {
-                statusVal.innerText = "Terkunci";
-                statusVal.style.color = "var(--danger)";
-                statusSub.innerText = "Aman dari Perubahan";
-                btnToggle.innerText = "🔓 Buka Kunci RKPDes";
-                alert("Data RKPDes dikunci untuk menjaga integritas audit.");
-            } else {
-                statusVal.innerText = "Buka";
-                statusVal.style.color = "var(--ink)";
-                statusSub.innerText = "Dapat Diedit";
-                btnToggle.innerText = "🔒 Kunci RKPDes";
-                alert("Kunci RKPDes dibuka. Anda dapat mengedit data kembali.");
+        function loadLocalState() {
+            const saved = localStorage.getItem('kaper_desa_v2_db');
+            if (saved) {
+                try {
+                    appState = JSON.parse(saved);
+                } catch(e) {}
             }
-            saveLocalState();
         }
 
         function backupJSON() {
-            appState.lastBackup = new Date().toISOString();
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
             const dlAnchor = document.createElement('a');
             dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `Backup_KaperDesa_${new Date().toISOString().slice(0,10)}.json`);
+            dlAnchor.setAttribute("download", `Backup_Arsip_KaperDesa_${new Date().toISOString().slice(0,10)}.json`);
             document.body.appendChild(dlAnchor);
             dlAnchor.click();
             dlAnchor.remove();
-            
-            document.getElementById('backupAlert').classList.add('hidden');
-            saveLocalState();
         }
 
         function restoreJSON() {
@@ -535,59 +585,16 @@
                 reader.readAsText(file, 'UTF-8');
                 reader.onload = readerEvent => {
                     try {
-                        const content = JSON.parse(readerEvent.target.result);
-                        appState = content;
+                        appState = JSON.parse(readerEvent.target.result);
                         saveLocalState();
-                        alert('Data berhasil di-restore!');
+                        alert('Data arsip berhasil dimuat ulang!');
                         location.reload();
                     } catch (err) {
-                        alert('Gagal memproses berkas JSON.');
+                        alert('Gagal membaca berkas backup JSON.');
                     }
                 }
             }
             input.click();
-        }
-
-        function checkBackupReminder() {
-            if(!appState.lastBackup) return;
-            const last = new Date(appState.lastBackup);
-            const now = new Date();
-            const diffDays = Math.ceil((now - last) / (1000 * 60 * 60 * 24));
-            if (diffDays > 7) {
-                document.getElementById('backupAlert').classList.remove('hidden');
-            }
-        }
-
-        function saveLocalState() {
-            localStorage.setItem('kaper_desa_db', JSON.stringify(appState));
-        }
-
-        function loadLocalState() {
-            const saved = localStorage.getItem('kaper_desa_db');
-            if (saved) {
-                appState = JSON.parse(saved);
-            }
-        }
-
-        function bukaModalKegiatan() {
-            if (appState.rkpLocked) {
-                alert("Data RKPDes sedang terkunci.");
-                return;
-            }
-            const nama = prompt("Masukkan Nama Kegiatan Perencanaan Baru:");
-            if (nama) {
-                alert(`Kegiatan "${nama}" berhasil ditambahkan.`);
-            }
-        }
-
-        function tambahSSH() {
-            const barang = prompt("Nama Material / Uraian Pekerjaan:");
-            const harga = prompt("Harga Satuan (Rp):");
-            if (barang && harga) {
-                const tbody = document.getElementById('tb-ssh');
-                const row = `<tr><td>SSH-00${tbody.children.length + 1}</td><td>${barang}</td><td>Satuan</td><td>Rp ${parseInt(harga).toLocaleString('id-ID')}</td></tr>`;
-                tbody.innerHTML += row;
-            }
         }
     </script>
 </body>
