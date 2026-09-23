@@ -240,7 +240,7 @@
         .meter-bar-bg { width: 100%; height: 7px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
         .meter-bar-fill { height: 100%; border-radius: 4px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* Stats Grid - Now Clickable with Animation */
+        /* Stats Grid - Clickable */
         .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 15px; }
         @media (max-width: 576px) { .grid-stats { grid-template-columns: repeat(2, 1fr); } }
 
@@ -327,7 +327,7 @@
         .badge-unlinked { background: rgba(255,255,255,0.08); color: var(--muted); }
         @keyframes pulse-dot { 0% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.8; } }
 
-        /* Expanded Search Box to Prevent Overlap */
+        /* Search Box */
         .search-box { 
             width: 100%; min-width: 220px; max-width: 320px; padding: 9px 15px; 
             border: 1px solid var(--line); border-radius: 12px; font-size: 0.86rem; 
@@ -882,7 +882,7 @@
                     currentRole = "auditor";
                     document.getElementById('screen-login-overlay').classList.add('hidden');
                     applyRolePermissions();
-                    alert("Login Berhasil! Anda masuk sebagai User (Read-Only).");
+                    alert("Login Berhasil! Anda masuk sebagai User / Tim Pemeriksa (Read-Only).");
                 } else {
                     alert("Password User Salah!");
                 }
@@ -902,11 +902,11 @@
             const tickerText = document.getElementById('ticker-mode-text');
 
             if (isAuditor) {
-                roleBadge.innerText = "Mode: User / Publik 👁️";
+                roleBadge.innerText = "Mode: User / Pemeriksa 👁️";
                 roleBadge.style.color = "#f59e0b";
-                topbarPill.innerHTML = '<i class="fa-solid fa-eye"></i> Mode User (Read-Only)';
+                topbarPill.innerHTML = '<i class="fa-solid fa-eye"></i> Mode User (Pemeriksa)';
                 topbarPill.className = "status-pill status-pill-audit";
-                if (tickerText) tickerText.innerText = "User Read-Only (Pengawasan)";
+                if (tickerText) tickerText.innerText = "Mode User: Tim Pemeriksa / PLD (Akses Lihat & Unduh Dokumen)";
             } else {
                 roleBadge.innerText = "Mode: Administrator 🔒";
                 roleBadge.style.color = "#38bdf8";
@@ -943,7 +943,7 @@
             closeMobileSidebar();
             const searchInput = document.getElementById(`search-${catKey}`);
             if (searchInput) {
-                searchInput.value = ""; // Jangan timpa input dengan teks panjang agar search box tetap rapi dan tidak terpotong
+                searchInput.value = "";
                 filterRack(catKey, laciName);
             }
         }
@@ -1104,11 +1104,17 @@
             `).join('');
         }
 
-        /* Create Row HTML for Compact List with Year Badge */
+        /* Create Row HTML with Dedicated User/Pemeriksa Download/Access Button */
         function createRowHTML(catKey, item) {
             const hasLink = item.link && item.link.trim() !== "";
             const isAdmin = (currentRole === "admin");
             const tahunDokumen = item.tahun ? item.tahun : "2026";
+
+            // Modifikasi link GDrive untuk langsung mode unduh jika diperlukan oleh pemeriksa (mengubah /view?usp=sharing menjadi /export atau /download jika link standar)
+            let downloadLink = item.link;
+            if (hasLink && downloadLink.includes('file/d/')) {
+                downloadLink = downloadLink.replace('/view?usp=sharing', '/view?usp=drivesdk').replace('/view', '/view?usp=drivesdk');
+            }
 
             return `
                 <div class="list-row-item">
@@ -1128,12 +1134,22 @@
                         <span class="badge ${hasLink ? 'badge-linked' : 'badge-unlinked'}">
                             ${hasLink ? 'Terhubung' : 'Belum Ada Link'}
                         </span>
+                        
+                        <!-- Tombol Khusus Admin -->
                         ${isAdmin ? `
                             <button class="btn btn-outline" style="padding:5px 9px; font-size:0.75rem;" onclick="editLink('${catKey}',${item.id})">
                                 <i class="fa-solid fa-link"></i> ${hasLink ? 'Ubah' : 'Paste Link'}
                             </button>
                         ` : ''}
-                        ${hasLink ? `<a href="${item.link}" target="_blank" class="btn btn-gdrive" style="padding:5px 9px; font-size:0.75rem;"><i class="fa-brands fa-google-drive"></i> Buka GDrive</a>` : ''}
+
+                        <!-- Tombol Buka/Unduh untuk Admin & User/Pemeriksa -->
+                        ${hasLink ? `
+                            <a href="${downloadLink}" target="_blank" class="btn btn-gdrive" style="padding:5px 10px; font-size:0.75rem;" title="Unduh atau Lihat Dokumen Ini untuk Keperluan Pemeriksaan">
+                                <i class="fa-solid fa-download"></i> ${isAdmin ? 'Buka GDrive' : 'Lihat & Unduh Berkas'}
+                            </a>
+                        ` : ''}
+
+                        <!-- Tombol Hapus Khusus Admin -->
                         ${isAdmin ? `
                             <button class="btn btn-outline" style="padding:5px 8px; font-size:0.75rem; color:var(--danger);" onclick="deleteItem('${catKey}',${item.id})"><i class="fa-solid fa-trash-can"></i></button>
                         ` : ''}
