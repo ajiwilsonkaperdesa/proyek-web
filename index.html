@@ -3,610 +3,719 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAPER DESA – Workspace Digital Kaur Perencanaan</title>
+    <title>RAK DIGITAL KAUR PERENCANAAN DESA KADUAGUNG</title>
     <style>
         :root {
-            --bg: #f4f7f8;
+            --bg: #f8fafc;
             --panel: #ffffff;
-            --ink: #172126;
-            --muted: #718087;
-            --line: #e4eaed;
-            --brand: #126b5a;
-            --brand2: #0d5145;
-            --accent: #d9a441;
-            --danger: #c63d4f;
-            --warn: #c88918;
-            --success: #2e7d32;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --brand: #0284c7;
+            --brand-dark: #0369a1;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --gdrive-color: #1a73e8;
         }
 
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: Inter, 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #eef6f3 55%, #edfef5); color: var(--ink); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: var(--bg); color: var(--ink); }
         
         .app { display: flex; min-height: 100vh; }
         
-        .sidebar { width: 260px; background: linear-gradient(180deg, #103f36, #092620); color: #fff; padding: 20px 15px; display: flex; flex-direction: column; gap: 20px; }
-        .brand { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
-        .logo { width: 38px; height: 38px; background: var(--accent); color: #103f36; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 1.1rem; }
-        .brand-text b { display: block; font-size: 1.05rem; }
-        .brand-text small { color: #a3c2b8; font-size: 0.75rem; }
+        /* Sidebar Navigation */
+        .sidebar { width: 285px; background: #0f172a; color: #fff; padding: 20px 15px; display: flex; flex-direction: column; gap: 15px; flex-shrink: 0; }
+        .brand { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #334155; padding-bottom: 15px; }
+        .logo { width: 42px; height: 42px; background: linear-gradient(135deg, var(--brand), #38bdf8); color: #fff; font-weight: bold; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 1.3rem; }
+        .brand-text b { display: block; font-size: 0.92rem; color: #f8fafc; }
+        .brand-text small { color: #94a3b8; font-size: 0.72rem; }
         
-        .nav { display: flex; flex-direction: column; gap: 15px; }
-        .nav-group { display: flex; flex-direction: column; gap: 4px; }
-        .nav-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: #729e91; font-weight:bold; margin-bottom: 4px; padding-left: 8px; }
+        .dev-badge { background: #1e293b; border: 1px dashed #475569; padding: 10px; border-radius: 8px; font-size: 0.75rem; color: #cbd5e1; }
+        .dev-badge strong { color: #38bdf8; display: block; font-size: 0.82rem; }
+
+        .nav { display: flex; flex-direction: column; gap: 4px; overflow-y: auto; }
+        .nav-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: 700; margin: 10px 0 4px 8px; }
+        .nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; background: transparent; border: none; color: #cbd5e1; border-radius: 8px; cursor: pointer; font-size: 0.85rem; text-align: left; transition: all 0.2s; line-height: 1.3; }
+        .nav-btn:hover { background: #1e293b; color: #fff; }
+        .nav-btn.active { background: var(--brand); color: #fff; font-weight: 600; }
+
+        /* Main Workspace */
+        .main { flex: 1; display: flex; flex-direction: column; padding: 25px 35px; gap: 20px; overflow-y: auto; }
         
-        .nav-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 10px 12px; background: transparent; border: none; color: #cbe0d8; border-radius: 8px; cursor: pointer; font-size: 0.88rem; text-align: left; transition: all 0.2s; }
-        .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
-        .nav-btn.active { background: rgba(255,255,255,0.15); color: #fff; font-weight: 600; }
-        
-        .main { flex: 1; display: flex; flex-direction: column; padding: 20px 30px; gap: 20px; overflow-y: auto; }
-        
-        .topbar { display: flex; justify-content: space-between; align-items: center; background: var(--panel); padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .topbar { display: flex; justify-content: space-between; align-items: center; background: var(--panel); padding: 16px 24px; border-radius: 12px; border: 1px solid var(--line); }
         .topbar-actions { display: flex; gap: 10px; }
         
-        .btn { padding: 8px 14px; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .btn { padding: 9px 16px; border-radius: 8px; border: none; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: 0.2s; text-decoration: none; }
         .btn-brand { background: var(--brand); color: #fff; }
-        .btn-brand:hover { background: var(--brand2); }
+        .btn-brand:hover { background: var(--brand-dark); }
+        .btn-gdrive { background: var(--gdrive-color); color: #fff; }
+        .btn-gdrive:hover { background: #1557b0; }
         .btn-outline { background: #fff; border: 1px solid var(--line); color: var(--ink); }
-        .btn-outline:hover { background: #f8fafb; }
-        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-outline:hover { background: #f8fafc; }
+        .btn-danger { background: #fef2f2; border: 1px solid #fca5a5; color: var(--danger); }
 
-        .select-filter { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 0.88rem; font-weight: 600; background: #fff; color: var(--ink); cursor: pointer; }
+        .banner { background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; padding: 25px 28px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .banner h2 { margin-bottom: 6px; font-size: 1.35rem; }
+        .banner p { opacity: 0.92; font-size: 0.88rem; line-height: 1.4; }
 
-        .banner { background: linear-gradient(135deg, var(--brand), var(--brand2)); color: #fff; padding: 25px; border-radius: 16px; }
-        .banner h2 { margin: 0 0 8px 0; font-size: 1.4rem; }
-        .banner p { margin: 0; opacity: 0.9; font-size: 0.9rem; }
-        
-        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .card-stat { background: var(--panel); padding: 18px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .card-stat small { color: var(--muted); font-size: 0.8rem; display: block; margin-bottom: 6px; }
-        .card-stat .val { font-size: 1.6rem; font-weight: bold; color: var(--ink); }
+        /* Widget IDM & SDGs Section */
+        .realtime-section { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 10px; }
+        .widget-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+        .widget-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+        .widget-header h4 { font-size: 1.05rem; display: flex; align-items: center; gap: 8px; color: var(--ink); }
+
+        .idm-status-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 15px; text-align: center; margin-bottom: 15px; }
+        .idm-status-title { font-size: 0.8rem; color: #166534; font-weight: 700; text-transform: uppercase; }
+        .idm-status-value { font-size: 1.8rem; font-weight: 800; color: #15803d; margin: 4px 0; }
+        .idm-score { font-size: 0.9rem; color: #166534; }
+
+        .idm-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center; }
+        .metric-item { background: #f8fafc; border: 1px solid var(--line); padding: 10px; border-radius: 8px; }
+        .metric-item small { font-size: 0.7rem; color: var(--muted); font-weight: 700; display: block; }
+        .metric-item b { font-size: 1.05rem; color: var(--ink); }
+
+        /* SDGs Grid */
+        .sdgs-summary { display: flex; align-items: center; justify-content: space-between; background: #f0f9ff; border: 1px solid #bae6fd; padding: 12px 16px; border-radius: 10px; margin-bottom: 15px; }
+        .sdgs-progress-bar { width: 100%; background: var(--line); height: 10px; border-radius: 5px; overflow: hidden; margin-top: 8px; }
+        .sdgs-progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #0284c7); transition: width 0.5s ease; }
+
+        .sdgs-goals-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 170px; overflow-y: auto; padding-right: 5px; }
+        .goal-chip { font-size: 0.72rem; padding: 6px 8px; background: #f8fafc; border: 1px solid var(--line); border-radius: 6px; display: flex; justify-content: space-between; }
+
+        /* Dashboard Stats Grid */
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+        .card-stat { background: var(--panel); padding: 16px; border-radius: 12px; border: 1px solid var(--line); }
+        .card-stat small { color: var(--muted); font-size: 0.75rem; font-weight: 700; display: block; margin-bottom: 6px; }
+        .card-stat .val { font-size: 1.6rem; font-weight: 700; color: var(--ink); }
         .card-stat .sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+        /* Rack Cards Grid */
+        .rack-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
+        .rack-title h3 { font-size: 1.2rem; font-weight: 700; }
+        .rack-title p { color: var(--muted); font-size: 0.85rem; margin-top: 2px; }
+
+        .search-box { width: 100%; max-width: 280px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 8px; font-size: 0.88rem; outline: none; }
+        .search-box:focus { border-color: var(--brand); }
+
+        .laci-group { margin-bottom: 25px; }
+        .laci-title { font-size: 1rem; font-weight: 700; color: #334155; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+
+        .rack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        .rack-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+        .rack-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.04); }
         
-        .card-panel { background: var(--panel); padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
-        .card-title { font-weight: bold; font-size: 1rem; margin: 0; }
-        
-        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-        th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid var(--line); }
-        th { background: #f8fafb; color: var(--muted); font-weight: 600; }
-        
-        .badge { padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
-        .badge-success { background: #e8f5e9; color: var(--success); }
-        .badge-danger { background: #ffebee; color: var(--danger); }
-        
+        .card-type-icon { font-size: 1.5rem; margin-bottom: 8px; display: inline-block; }
+        .card-item-title { font-weight: 700; font-size: 0.95rem; color: var(--ink); margin-bottom: 6px; line-height: 1.4; }
+        .card-date { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; }
+
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; display: inline-block; width: fit-content; margin-bottom: 10px; }
+        .badge-linked { background: #d1fae5; color: #065f46; }
+        .badge-unlinked { background: #f3f4f6; color: #6b7280; }
+
+        .card-actions { display: flex; gap: 8px; margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; }
+
         .hidden { display: none !important; }
-        .filter-box { display: flex; align-items: center; gap: 10px; background: #f8fafb; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--line); margin-bottom: 15px; }
+        .empty-state { text-align: center; padding: 30px; background: var(--panel); border-radius: 12px; border: 1px dashed var(--line); color: var(--muted); font-size: 0.88rem; }
     </style>
 </head>
 <body>
     <div class="app">
+        <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="brand">
-                <div class="logo">KD</div>
+                <div class="logo">🗂️</div>
                 <div class="brand-text">
-                    <b>KAPER DESA</b>
-                    <small>Workspace Perencanaan</small>
+                    <b>KAUR PERENCANAAN</b>
+                    <small>Rak Digital Administrasi Desa</small>
                 </div>
             </div>
+
+            <div class="dev-badge">
+                <small style="color:#94a3b8;">Pengembang Aplikasi:</small>
+                <strong>👨‍💻 Aji Wilson</strong>
+                <span style="font-size:0.7rem; color:#cbd5e1;">Kaur Perencanaan Desa Kaduagung</span>
+            </div>
+
             <nav class="nav">
-                <div class="nav-group">
-                    <div class="nav-label">Utama</div>
-                    <button class="nav-btn active" id="btn-nav-dashboard" onclick="switchPage('dashboard')"><span>❖</span> Dashboard</button>
-                    <button class="nav-btn" id="btn-nav-timeline" onclick="switchPage('timeline')"><span>📅</span> Siklus Perencanaan</button>
-                </div>
-                <div class="nav-group">
-                    <div class="nav-label">Perencanaan</div>
-                    <button class="nav-btn" id="btn-nav-rpjmdes" onclick="switchPage('rpjmdes')"><span>📕</span> RPJMDes</button>
-                    <button class="nav-btn" id="btn-nav-rkpdes" onclick="switchPage('rkpdes')"><span>📘</span> RKPDes</button>
-                    <button class="nav-btn" id="btn-nav-usulan" onclick="switchPage('usulan')"><span>💬</span> Usulan Warga</button>
-                    <button class="nav-btn" id="btn-nav-audit" onclick="switchPage('audit')"><span>🛡️</span> Matriks Audit</button>
-                </div>
-                <div class="nav-group">
-                    <div class="nav-label">Anggaran & Kegiatan</div>
-                    <button class="nav-btn" id="btn-nav-ssh" onclick="switchPage('ssh')"><span>🏷️</span> Master SSH Desa</button>
-                    <button class="nav-btn" id="btn-nav-rab" onclick="switchPage('rab')"><span>∑</span> RAB Kegiatan</button>
-                    <button class="nav-btn" id="btn-nav-kegiatan" onclick="switchPage('kegiatan')"><span>●</span> Daftar Kegiatan</button>
-                </div>
+                <button class="nav-btn active" id="btn-nav-dashboard" onclick="switchPage('dashboard')">📊 Dashboard & Live Status</button>
+                
+                <div class="nav-label">Daftar Rak Digital (Tupoksi)</div>
+                <button class="nav-btn" id="btn-nav-rak01" onclick="switchPage('rak01')">🗂️ RAK 01: Regulasi & Acuan</button>
+                <button class="nav-btn" id="btn-nav-rak02" onclick="switchPage('rak02')">🗂️ RAK 02: RPJM Desa</button>
+                <button class="nav-btn" id="btn-nav-rak03" onclick="switchPage('rak03')">🗂️ RAK 03: RKP Desa</button>
+                <button class="nav-btn" id="btn-nav-rak04" onclick="switchPage('rak04')">🗂️ RAK 04: Penganggaran</button>
+                <button class="nav-btn" id="btn-nav-rak05" onclick="switchPage('rak05')">🗂️ RAK 05: Data Profil Desa</button>
+                <button class="nav-btn" id="btn-nav-rak06" onclick="switchPage('rak06')">🗂️ RAK 06: Monev & Pelaporan</button>
             </nav>
         </aside>
 
+        <!-- Main Workspace -->
         <main class="main">
             <header class="topbar">
                 <div>
-                    <strong>Desa Kaduagung</strong> <span style="color:var(--muted); font-size:0.85rem;">• Kec. Karangkencana</span>
+                    <strong>Pemerintah Desa Kaduagung</strong>
+                    <span style="color:var(--muted); font-size:0.85rem;"> • Landasan: UU No. 3 Thn 2024 & Permendagri 84/2015</span>
                 </div>
                 <div class="topbar-actions">
-                    <button class="btn btn-outline" onclick="resetDatabase()">🔄 Reset Data Awal</button>
-                    <button class="btn btn-outline" onclick="restoreJSON()">Restore JSON</button>
-                    <button class="btn btn-outline" onclick="backupJSON()">Backup JSON</button>
+                    <button class="btn btn-outline" onclick="backupData()">📥 Backup JSON</button>
+                    <button class="btn btn-outline" onclick="restoreData()">📤 Restore JSON</button>
+                    <button class="btn btn-danger" onclick="resetDatabase()">🔄 Reset System</button>
                 </div>
             </header>
 
-            <!-- Dashboard View -->
+            <!-- 1. DASHBOARD PAGE -->
             <section id="page-dashboard" class="page-content">
                 <div class="banner">
-                    <h2>Workspace Digital Kaur Perencanaan</h2>
-                    <p>Pengarsipan dokumen terintegrasi Google Drive per periode RPJMDes dan per tahun RKPDes.</p>
-                </div>
-                
-                <div class="grid-stats" style="margin-top:20px;">
-                    <div class="card-stat">
-                        <small>Periode RPJMDes Aktif</small>
-                        <div class="val" id="dash-rpjm-period">-</div>
-                        <div class="sub">Masa Jabatan Kepala Desa</div>
+                    <div>
+                        <h2>Pusat Perencanaan & Monitoring Desa Kaduagung</h2>
+                        <p>Sistem Pengelolaan Dokumen Tupoksi Kaur Perencanaan & Pemantauan Status Realtime Indeks Desa Membangun (IDM) dan SDGs Desa.</p>
                     </div>
-                    <div class="card-stat">
-                        <small>Tahun RKPDes Aktif</small>
-                        <div class="val" id="dash-rkp-year">-</div>
-                        <div class="sub">Tahun Anggaran Berjalan</div>
-                    </div>
-                    <div class="card-stat">
-                        <small>Kelengkapan RKPDes (<span id="dash-year-label"></span>)</small>
-                        <div class="val" id="dash-rkp-progress">0%</div>
-                        <div class="sub">berkas terhubung</div>
+                    <div>
+                        <button class="btn btn-gdrive" onclick="setOrOpenMasterGDrive()">🔗 Buka Master Google Drive</button>
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:20px;">
-                    <div class="card-panel">
-                        <div class="card-header">
-                            <h3 class="card-title">📕 RPJMDes (Per Periode)</h3>
-                            <button class="btn btn-brand" onclick="switchPage('rpjmdes')">Buka RPJMDes</button>
+                <!-- REALTIME MONITORING IDM & SDGS DESA -->
+                <div class="realtime-section">
+                    <!-- Widget IDM -->
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <h4>🏛️ Status Indeks Desa Membangun (IDM)</h4>
+                            <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="updateIDMData()">✏️ Update Data IDM</button>
                         </div>
-                        <p style="font-size:0.88rem; color:var(--muted);">Kelola dokumen RPJMDes sesuai periode kepemimpinan. Bebas tambah periode jabatan baru.</p>
-                    </div>
-                    
-                    <div class="card-panel">
-                        <div class="card-header">
-                            <h3 class="card-title">📘 RKPDes (Per Tahun)</h3>
-                            <button class="btn btn-brand" onclick="switchPage('rkpdes')">Buka RKPDes</button>
+                        <div class="idm-status-box">
+                            <div class="idm-status-title">Status Desa Kaduagung</div>
+                            <div class="idm-status-value" id="idm-status-text">DESA MANDIRI</div>
+                            <div class="idm-score">Skor Komposit IDM: <b id="idm-score-val">0.8241</b></div>
                         </div>
-                        <p style="font-size:0.88rem; color:var(--muted);">Kelola 30 dokumen syarat RKPDes per tahun anggaran. Arsip tahun-tahun lalu tersimpan aman.</p>
+                        <div class="idm-metrics">
+                            <div class="metric-item">
+                                <small>IKS (Sosial)</small>
+                                <b id="idm-iks-val">0.852</b>
+                            </div>
+                            <div class="metric-item">
+                                <small>IKE (Ekonomi)</small>
+                                <b id="idm-ike-val">0.768</b>
+                            </div>
+                            <div class="metric-item">
+                                <small>IKL (Lingkungan)</small>
+                                <b id="idm-ikl-val">0.852</b>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Widget SDGs Desa -->
+                    <div class="widget-card">
+                        <div class="widget-header">
+                            <h4>🌐 Capaian SDGs Desa (18 Indikator)</h4>
+                            <button class="btn btn-outline" style="padding:4px 8px; font-size:0.75rem;" onclick="updateSDGsData()">✏️ Update SDGs</button>
+                        </div>
+                        <div class="sdgs-summary">
+                            <div>
+                                <small style="color:var(--muted); font-weight:700;">Rata-rata Skor SDGs Desa</small>
+                                <div style="font-size:1.4rem; font-weight:800; color:var(--brand);" id="sdgs-avg-val">76.8 / 100</div>
+                            </div>
+                            <span class="badge badge-linked" id="sdgs-badge-text">Kategori: Sangat Baik</span>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <small style="font-size:0.75rem; color:var(--muted); font-weight:700;">Kemajuan Capaian Keseluruhan:</small>
+                            <div class="sdgs-progress-bar">
+                                <div class="sdgs-progress-fill" id="sdgs-progress-fill" style="width: 76.8%;"></div>
+                            </div>
+                        </div>
+                        <div class="sdgs-goals-list" id="sdgs-goals-container">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATS COUNTER RAK -->
+                <div style="margin-top:20px;">
+                    <h3 style="font-size:1rem; margin-bottom:12px;">🗂️ Statistik Kelengkapan Berkas per Rak Digital</h3>
+                    <div class="grid-stats">
+                        <div class="card-stat">
+                            <small>RAK 01: Regulasi</small>
+                            <div class="val" id="stat-rak01">0</div>
+                            <div class="sub" id="stat-rak01-sub">0 Terhubung</div>
+                        </div>
+                        <div class="card-stat">
+                            <small>RAK 02: RPJM Desa</small>
+                            <div class="val" id="stat-rak02">0</div>
+                            <div class="sub" id="stat-rak02-sub">0 Terhubung</div>
+                        </div>
+                        <div class="card-stat">
+                            <small>RAK 03: RKP Desa</small>
+                            <div class="val" id="stat-rak03">0</div>
+                            <div class="sub" id="stat-rak03-sub">0 Terhubung</div>
+                        </div>
+                        <div class="card-stat">
+                            <small>RAK 04: Penganggaran</small>
+                            <div class="val" id="stat-rak04">0</div>
+                            <div class="sub" id="stat-rak04-sub">0 Terhubung</div>
+                        </div>
+                        <div class="card-stat">
+                            <small>RAK 05: Data Profil</small>
+                            <div class="val" id="stat-rak05">0</div>
+                            <div class="sub" id="stat-rak05-sub">0 Terhubung</div>
+                        </div>
+                        <div class="card-stat">
+                            <small>RAK 06: Monev & LPPD</small>
+                            <div class="val" id="stat-rak06">0</div>
+                            <div class="sub" id="stat-rak06-sub">0 Terhubung</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RECENT ADDED FILES -->
+                <div style="margin-top:25px;">
+                    <div class="rack-header">
+                        <div class="rack-title">
+                            <h3>📌 Berkas Dokumen Terbaru Ditambahkan</h3>
+                            <p>Akses cepat ke tautan berkas yang baru dimasukkan oleh Kaur Perencanaan</p>
+                        </div>
+                    </div>
+                    <div id="dashboard-recent-grid" class="rack-grid"></div>
                 </div>
             </section>
 
-            <!-- Halaman RPJMDes -->
-            <section id="page-rpjmdes" class="page-content hidden">
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h3 class="card-title">📕 Dokumen RPJMDes (Per Periode Masa Jabatan)</h3>
-                        <button class="btn btn-brand" onclick="tambahPeriodeRPJMDes()">+ Tambah Periode Jabatan</button>
+            <!-- RAK PAGES (01 - 06) -->
+            <section id="page-rak01" class="page-content hidden">
+                <div class="rack-header">
+                    <div class="rack-title">
+                        <h3>🗂️ RAK 01: DOKUMEN REGULASI & ACUAN</h3>
+                        <p>Kumpulan UU, Permendagri, Permendes, Perda, Perbup, Perdes & SK Kepala Desa</p>
                     </div>
-
-                    <div class="filter-box">
-                        <label for="select-rpjm-period"><b>Pilih Periode RPJMDes:</b></label>
-                        <select id="select-rpjm-period" class="select-filter" onchange="gantiPeriodeRPJM(this.value)"></select>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" class="search-box" placeholder="Cari Regulasi..." onkeyup="filterRack('rak01', this.value)">
+                        <button class="btn btn-brand" onclick="addNewItem('rak01')">+ Tambah Berkas Baru</button>
                     </div>
-
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                        <span style="font-size:0.88rem; color:var(--muted);">Daftar Dokumen Utama RPJMDes:</span>
-                        <button class="btn btn-outline" onclick="tambahItemRPJMDes()">+ Tambah Berkas Baru</button>
-                    </div>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">No</th>
-                                <th>Nama Dokumen RPJMDes</th>
-                                <th>Status Link</th>
-                                <th>Aksi Dokumen</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tb-rpjmdes"></tbody>
-                    </table>
                 </div>
+                <div id="container-rak01"></div>
             </section>
 
-            <!-- Halaman RKPDes -->
-            <section id="page-rkpdes" class="page-content hidden">
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h3 class="card-title">📘 Dokumen RKPDes (Per Tahun Anggaran)</h3>
-                        <button class="btn btn-brand" onclick="tambahTahunRKPDes()">+ Tambah Tahun Anggaran</button>
+            <section id="page-rak02" class="page-content hidden">
+                <div class="rack-header">
+                    <div class="rack-title">
+                        <h3>🗂️ RAK 02: PERENCANAAN JANGKA MENENGAH (RPJM DESA)</h3>
+                        <p>Dokumen RPJM Desa Periode Berjalan, BA Musdes, & Daftar Usulan Rencana Desa</p>
                     </div>
-
-                    <div class="filter-box">
-                        <label for="select-rkp-year"><b>Pilih Tahun Anggaran RKPDes:</b></label>
-                        <select id="select-rkp-year" class="select-filter" onchange="gantiTahunRKP(this.value)"></select>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" class="search-box" placeholder="Cari Dokumen RPJM..." onkeyup="filterRack('rak02', this.value)">
+                        <button class="btn btn-brand" onclick="addNewItem('rak02')">+ Tambah Berkas Baru</button>
                     </div>
-
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                        <span style="font-size:0.88rem; color:var(--muted);">Daftar 30 Berkas Persyaratan RKPDes:</span>
-                        <button class="btn btn-outline" onclick="tambahItemRKPDes()">+ Tambah Berkas Baru</button>
-                    </div>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">No</th>
-                                <th>Nama Dokumen / Berkas RKPDes</th>
-                                <th>Status Link</th>
-                                <th>Aksi Dokumen</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tb-rkpdes"></tbody>
-                    </table>
                 </div>
+                <div id="container-rak02"></div>
             </section>
 
-            <!-- Matriks Audit -->
-            <section id="page-audit" class="page-content hidden">
-                <div class="card-panel">
-                    <div class="card-header">
-                        <h3 class="card-title">🛡️ Matriks Audit Readiness</h3>
+            <section id="page-rak03" class="page-content hidden">
+                <div class="rack-header">
+                    <div class="rack-title">
+                        <h3>🗂️ RAK 03: PERENCANAAN TAHUNAN (RKP DESA)</h3>
+                        <p>Dokumen RKP Desa Final, SK Tim Penyusun, BA Musrenbangdes, Matriks RKA & DU-RKP</p>
                     </div>
-                    <p style="font-size:0.85rem; color:var(--muted);">Status kelengkapan berkas RKPDes tahun berjalan yang siap diperiksa auditor.</p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Persyaratan Audit</th>
-                                <th>Status Kelengkapan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tb-audit"></tbody>
-                    </table>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" class="search-box" placeholder="Cari Dokumen RKP..." onkeyup="filterRack('rak03', this.value)">
+                        <button class="btn btn-brand" onclick="addNewItem('rak03')">+ Tambah Berkas Baru</button>
+                    </div>
                 </div>
+                <div id="container-rak03"></div>
             </section>
 
-            <!-- Generic Page -->
-            <section id="page-generic" class="page-content hidden">
-                <div class="card-panel">
-                    <h3 class="card-title" id="generic-title">Modul Perencanaan</h3>
-                    <p style="color:var(--muted); font-size:0.9rem; margin-top:10px;">Fitur ini aktif dan siap digunakan.</p>
+            <section id="page-rak04" class="page-content hidden">
+                <div class="rack-header">
+                    <div class="rack-title">
+                        <h3>🗂️ RAK 04: PENGANGGARAN (APB DESA & RAK)</h3>
+                        <p>Rancangan APB Desa, APB Desa Final, RAK Desa Triwulan, & RAB Kegiatan</p>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" class="search-box" placeholder="Cari Penganggaran..." onkeyup="filterRack('rak04', this.value)">
+                        <button class="btn btn-brand" onclick="addNewItem('rak04')">+ Tambah Berkas Baru</button>
+                    </div>
                 </div>
+                <div id="container-rak04"></div>
+            </section>
+
+            <section id="page-rak05" class="page-content hidden">
+                <div class="rack-header">
+                    <div class="rack-title">
+                        <h3>🗂️ RAK 05: DATA PROFIL & INVENTARISASI DESA</h3>
+                        <p>Prodeskel/Epdeskel, Data SDGs & IDM, Data Kemiskinan/Potensi, & Peta Topografi</p>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" class="search-box" placeholder="Cari Data Profil..." onkeyup="filterRack('rak05', this.value)">
+                        <button class="btn btn-brand" onclick="addNewItem('rak05')">+ Tambah Berkas Baru</button>
+                    </div>
+                </div>
+                <div id="container-rak05"></div>
+            </section>
+
+            <section id="page-rak06" class="page-content hidden">
+                <div class="rack-header">
+                    <div class="rack-title">
+                        <h3>🗂️ RAK 06: MONITORING, EVALUASI & PELAPORAN</h3>
+                        <p>Laporan Realisasi Fisik/Keuangan, Foto Kegiatan 0%-100%, LPPD & ILPPD</p>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" class="search-box" placeholder="Cari Laporan/Foto..." onkeyup="filterRack('rak06', this.value)">
+                        <button class="btn btn-brand" onclick="addNewItem('rak06')">+ Tambah Berkas Baru</button>
+                    </div>
+                </div>
+                <div id="container-rak06"></div>
             </section>
         </main>
     </div>
 
     <script>
-        const defaultRKPFiles = [
-            "1. COVER RKPDesa",
-            "2. Perdes ttg RKPDesa",
-            "3. SK Pengangkatan Tim Penyusun RKP Desa",
-            "4. DOKUMEN RKP DESA",
-            "5. BA. Pembentukan Tim Penyusun RKP Desa",
-            "6. RKTL_RKP Desa",
-            "7. Daftar Rencana Program & Kegiatan yg Masuk ke Desa",
-            "8. Data & Informasi Pembiayaan Desa",
-            "9. Daftar Prioritas Usulan Rencana Program",
-            "10. Daftar Usulan Masy. Dipilih SDGs Desa",
-            "11. Daftar Kerjasama Desa",
-            "12. Rancangan RKP Desa",
-            "13. Evaluasi RKP Desa Tahun Sebelumnya",
-            "14-15. Gambar Desain dan RAB Kegiatan",
-            "16. DU RKP Desa",
-            "17. BA. Hasil Penyusunan Rancangan RKP Desa",
-            "18. Kpts BPD Musdes Perencanaan Desa",
-            "19. BA, Musdes Perencanaan Desa",
-            "20. SK Panitia Musrenbang RKP Desa",
-            "21. Pandangan Resmi BPD RKP Desa",
-            "23. SK Panitia Musdes Pengesahan RKP Desa",
-            "24. Tata Tertib Musrenbang RKP Desa",
-            "25. BA, Musdes Pengesahan RKP Desa",
-            "26. Daftar RKP Desa",
-            "27. DOKUMENTASI KEGIATAN",
-            "28. Draft SK Delegasi Musrenbangcam",
-            "29. Penyusunan Prioritas Kegiatan",
-            "30. BA. Musrenbang Desa RKP Desa"
-        ];
+        // Data Initial
+        const defaultData = {
+            developer: "Aji Wilson (Kaur Perencanaan Desa Kaduagung)",
+            masterGDrive: "",
+            idm: {
+                status: "DESA MANDIRI",
+                skor: 0.8241,
+                iks: 0.8520,
+                ike: 0.7680,
+                ikl: 0.8520
+            },
+            sdgs: {
+                avgScore: 76.8,
+                goals: [
+                    { id: 1, name: "Tanpa Kemiskinan", score: 82 },
+                    { id: 2, name: "Tanpa Kelaparan", score: 88 },
+                    { id: 3, name: "Sehat & Sejahtera", score: 79 },
+                    { id: 4, name: "Pendidikan Berkualitas", score: 85 },
+                    { id: 5, name: "Keterlibatan Perempuan", score: 74 },
+                    { id: 6, name: "Air Bersih & Sanitasi", score: 90 },
+                    { id: 7, name: "Energi Bersih", score: 80 },
+                    { id: 8, name: "Pertumbuhan Ekonomi", score: 72 },
+                    { id: 9, name: "Infrastruktur & Inovasi", score: 75 },
+                    { id: 10, name: "Berkurangnya Kesenjangan", score: 70 },
+                    { id: 11, name: "Kawasan Pemukiman Safe", score: 78 },
+                    { id: 12, name: "Konsumsi Bertanggungjawab", score: 68 },
+                    { id: 13, name: "Tanggap Perubahan Iklim", score: 71 },
+                    { id: 14, name: "Ekosistem Lautan/Perairan", score: 65 },
+                    { id: 15, name: "Ekosistem Darat", score: 77 },
+                    { id: 16, name: "Perdamaian & Keadilan", score: 89 },
+                    { id: 17, name: "Kemitraan Pembangunan", score: 76 },
+                    { id: 18, name: "Kelembagaan Desa Dinamis", score: 84 }
+                ]
+            },
+            rak01: [
+                { id: 101, laci: "01_Undang-Undang & Peraturan Menteri", title: "UU No. 3 Tahun 2024 ttg Perubahan Kedua UU Desa", link: "", date: "2026-01-05", icon: "📜" },
+                { id: 102, laci: "01_Undang-Undang & Peraturan Menteri", title: "Permendagri No. 114 Tahun 2014 ttg Pembangunan Desa", link: "", date: "2026-01-05", icon: "📜" },
+                { id: 103, laci: "02_Peraturan Daerah & Peraturan Bupati", title: "Perbup Pedoman Penyusunan RKP Desa & APB Desa", link: "", date: "2026-01-10", icon: "📑" },
+                { id: 104, laci: "03_Peraturan Desa & SK Kepala Desa Terkait Perencanaan", title: "Perdes SOKT & Tata Cara Perencanaan Desa", link: "", date: "2026-01-12", icon: "⚖️" }
+            ],
+            rak02: [
+                { id: 201, laci: "01_Dokumen RPJM Desa (Periode Berjalan)", title: "Dokumen Utama RPJM Desa Kaduagung 2026-2032", link: "", date: "2026-01-15", icon: "📕" },
+                { id: 202, laci: "02_Berita Acara & Notulen Musdes RPJM Desa", title: "BA & Notulen Musdes Penyusunan RPJM Desa", link: "", date: "2026-01-16", icon: "📝" }
+            ],
+            rak03: [
+                { id: 301, laci: "01_Dokumen RKP Desa Final", title: "Dokumen RKP Desa TA 2027 Final", link: "", date: "2026-09-01", icon: "📘" },
+                { id: 302, laci: "02_SK Tim Penyusun RKP Desa", title: "SK Kepala Desa ttg Tim Penyusun RKP Desa TA 2027", link: "", date: "2026-06-10", icon: "📄" },
+                { id: 303, laci: "03_Berita Acara Musrenbangdes RKP Desa", title: "BA Musrenbangdes RKP Desa TA 2027", link: "", date: "2026-08-20", icon: "📝" }
+            ],
+            rak04: [
+                { id: 401, laci: "01_Rancangan APB Desa", title: "Draft Rancangan APB Desa TA 2027", link: "", date: "2026-10-01", icon: "📙" },
+                { id: 402, laci: "02_Dokumen APB Desa Final (Murni & Perubahan)", title: "Perdes APB Desa Murni TA 2027", link: "", date: "2026-12-28", icon: "⚖️" }
+            ],
+            rak05: [
+                { id: 501, laci: "01_Data Profil Desa (Prodeskel / Epdeskel)", title: "Laporan Profil Desa Tahun 2026", link: "", date: "2026-03-01", icon: "📂" },
+                { id: 502, laci: "02_Data SDGs Desa & IDM (Indeks Desa Membangun)", title: "Laporan Pemutakhiran Data SDGs & IDM Desa Kaduagung", link: "", date: "2026-05-15", icon: "🌐" }
+            ],
+            rak06: [
+                { id: 601, laci: "01_Laporan Capaian Realisasi Fisik & Keuangan", title: "Laporan Realisasi Fisik & Keuangan Semester I & II", link: "", date: "2026-12-30", icon: "📊" },
+                { id: 602, laci: "03_Laporan Penyelenggaraan Pemerintahan Desa (LPPD)", title: "Dokumen LPPD Akhir Tahun Anggaran 2026", link: "", date: "2026-12-31", icon: "📗" }
+            ]
+        };
 
-        const defaultRPJMFiles = [
-            "1. Dokumen Utama RPJMDes",
-            "2. Perdes RPJMDes Sah",
-            "3. SK Tim Penyusun RPJMDes",
-            "4. Berita Acara Musdes RPJMDes",
-            "5. Peta Masalah & Potensi Desa",
-            "6. Matriks Rencana Kerja 8 Tahun",
-            "7. Berita Acara Pengesahan BPD"
-        ];
-
-        function createInitialState() {
-            return {
-                version: 3,
-                activeRpjmPeriod: "2020 - 2028",
-                rpjmData: {
-                    "2020 - 2028": defaultRPJMFiles.map((nama, i) => ({ id: i + 1, nama: nama, link: "" }))
-                },
-                activeRkpYear: "2027",
-                rkpData: {
-                    "2027": defaultRKPFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} 2027`, link: "" }))
-                }
-            };
-        }
-
-        let appState = createInitialState();
+        let appData = {};
 
         window.addEventListener('DOMContentLoaded', () => {
-            loadAndFixState();
-            initDropdowns();
-            renderAll();
+            loadDatabase();
+            renderAllPages();
         });
 
-        function loadAndFixState() {
-            const saved = localStorage.getItem('kaper_desa_v3_db');
+        function loadDatabase() {
+            const saved = localStorage.getItem('rak_kaur_perencanaan_db');
             if (saved) {
                 try {
-                    const parsed = JSON.parse(saved);
-                    if (parsed && parsed.version === 3 && parsed.rkpData && parsed.rpjmData) {
-                        appState = parsed;
-                    } else {
-                        appState = createInitialState();
-                        saveLocalState();
-                    }
+                    appData = JSON.parse(saved);
+                    if(!appData.idm) appData.idm = defaultData.idm;
+                    if(!appData.sdgs) appData.sdgs = defaultData.sdgs;
                 } catch(e) {
-                    appState = createInitialState();
-                    saveLocalState();
+                    appData = defaultData;
+                    saveDatabase();
                 }
             } else {
-                saveLocalState();
+                appData = defaultData;
+                saveDatabase();
             }
         }
 
-        function saveLocalState() {
-            localStorage.setItem('kaper_desa_v3_db', JSON.stringify(appState));
+        function saveDatabase() {
+            localStorage.setItem('rak_kaur_perencanaan_db', JSON.stringify(appData));
         }
 
         function resetDatabase() {
-            if (confirm("Reset seluruh data ke kondisi awal (30 berkas RKPDes)?")) {
-                localStorage.removeItem('kaper_desa_v3_db');
-                localStorage.removeItem('kaper_desa_v2_db');
-                localStorage.removeItem('kaper_desa_db');
-                appState = createInitialState();
-                saveLocalState();
-                initDropdowns();
-                renderAll();
-                alert("Data berhasil direset!");
+            if (confirm("Reset seluruh sistem kembali ke data awal Desa Kaduagung?")) {
+                appData = JSON.parse(JSON.stringify(defaultData));
+                saveDatabase();
+                renderAllPages();
+                alert("Sistem berhasil direset ke kondisi awal!");
             }
-        }
-
-        function renderAll() {
-            renderRPJMTable();
-            renderRKPTable();
-            renderAuditTable();
-            updateDashboard();
-        }
-
-        function initDropdowns() {
-            const selectRPJM = document.getElementById('select-rpjm-period');
-            if(selectRPJM) {
-                selectRPJM.innerHTML = Object.keys(appState.rpjmData).map(p => 
-                    `<option value="${p}" ${p === appState.activeRpjmPeriod ? 'selected' : ''}>Periode ${p}</option>`
-                ).join('');
-            }
-
-            const selectRKP = document.getElementById('select-rkp-year');
-            if(selectRKP) {
-                selectRKP.innerHTML = Object.keys(appState.rkpData).map(y => 
-                    `<option value="${y}" ${y === appState.activeRkpYear ? 'selected' : ''}>Tahun Anggaran ${y}</option>`
-                ).join('');
-            }
-        }
-
-        function gantiPeriodeRPJM(periode) {
-            appState.activeRpjmPeriod = periode;
-            saveLocalState();
-            renderRPJMTable();
-            updateDashboard();
-        }
-
-        function tambahPeriodeRPJMDes() {
-            const periodeBaru = prompt("Masukkan Periode Masa Jabatan Baru (Contoh: 2028 - 2036):");
-            if (periodeBaru && periodeBaru.trim() !== "") {
-                const key = periodeBaru.trim();
-                if (!appState.rpjmData[key]) {
-                    appState.rpjmData[key] = defaultRPJMFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} (${key})`, link: "" }));
-                }
-                appState.activeRpjmPeriod = key;
-                saveLocalState();
-                initDropdowns();
-                renderRPJMTable();
-                updateDashboard();
-            }
-        }
-
-        function renderRPJMTable() {
-            const tbody = document.getElementById('tb-rpjmdes');
-            if(!tbody) return;
-            const docs = appState.rpjmData[appState.activeRpjmPeriod] || [];
-
-            tbody.innerHTML = docs.map((doc, idx) => {
-                const hasLink = doc.link && doc.link.trim() !== "";
-                return `
-                    <tr>
-                        <td><b>${idx + 1}</b></td>
-                        <td><b>${doc.nama}</b></td>
-                        <td>
-                            <span class="badge ${hasLink ? 'badge-success' : 'badge-danger'}">
-                                ${hasLink ? 'Telah Ditautkan' : 'Belum Ada Link'}
-                            </span>
-                        </td>
-                        <td style="display:flex; gap:6px;">
-                            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="tautkanLinkRPJM(${doc.id})">
-                                🔗 ${hasLink ? 'Ubah Link' : 'Tautkan Link'}
-                            </button>
-                            ${hasLink ? `<button class="btn btn-brand" style="padding:4px 10px; font-size:0.75rem;" onclick="window.open('${doc.link}', '_blank')">↗️ Buka</button>` : ''}
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function tautkanLinkRPJM(id) {
-            const docs = appState.rpjmData[appState.activeRpjmPeriod];
-            const doc = docs.find(d => d.id === id);
-            if (!doc) return;
-
-            const inputLink = prompt(`Tempelkan (Paste) Link Google Drive untuk:\n"${doc.nama}"`, doc.link || "");
-            if (inputLink !== null) {
-                doc.link = inputLink.trim();
-                saveLocalState();
-                renderRPJMTable();
-            }
-        }
-
-        function tambahItemRPJMDes() {
-            const nama = prompt("Masukkan Nama Berkas RPJMDes Baru:");
-            if (nama && nama.trim() !== "") {
-                const docs = appState.rpjmData[appState.activeRpjmPeriod];
-                const newId = docs.length ? Math.max(...docs.map(d => d.id)) + 1 : 1;
-                docs.push({ id: newId, nama: nama.trim(), link: "" });
-                saveLocalState();
-                renderRPJMTable();
-            }
-        }
-
-        function gantiTahunRKP(tahun) {
-            appState.activeRkpYear = tahun;
-            saveLocalState();
-            renderRKPTable();
-            renderAuditTable();
-            updateDashboard();
-        }
-
-        function tambahTahunRKPDes() {
-            const tahunBaru = prompt("Masukkan Tahun Anggaran Baru (Contoh: 2028):");
-            if (tahunBaru && tahunBaru.trim() !== "") {
-                const key = tahunBaru.trim();
-                if (!appState.rkpData[key]) {
-                    appState.rkpData[key] = defaultRKPFiles.map((nama, i) => ({ id: i + 1, nama: `${nama} ${key}`, link: "" }));
-                }
-                appState.activeRkpYear = key;
-                saveLocalState();
-                initDropdowns();
-                renderRKPTable();
-                renderAuditTable();
-                updateDashboard();
-            }
-        }
-
-        function renderRKPTable() {
-            const tbody = document.getElementById('tb-rkpdes');
-            if(!tbody) return;
-            const docs = appState.rkpData[appState.activeRkpYear] || [];
-
-            if (docs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:20px; color:var(--muted);">Tidak ada dokumen RKPDes. Klik tombol "+ Tambah Berkas Baru".</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = docs.map((doc, idx) => {
-                const hasLink = doc.link && doc.link.trim() !== "";
-                return `
-                    <tr>
-                        <td><b>${idx + 1}</b></td>
-                        <td><b>${doc.nama}</b></td>
-                        <td>
-                            <span class="badge ${hasLink ? 'badge-success' : 'badge-danger'}">
-                                ${hasLink ? 'Telah Ditautkan' : 'Belum Ada Link'}
-                            </span>
-                        </td>
-                        <td style="display:flex; gap:6px;">
-                            <button class="btn btn-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="tautkanLinkRKP(${doc.id})">
-                                🔗 ${hasLink ? 'Ubah Link' : 'Tautkan Link'}
-                            </button>
-                            ${hasLink ? `<button class="btn btn-brand" style="padding:4px 10px; font-size:0.75rem;" onclick="window.open('${doc.link}', '_blank')">↗️ Buka</button>` : ''}
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function tautkanLinkRKP(id) {
-            const docs = appState.rkpData[appState.activeRkpYear];
-            const doc = docs.find(d => d.id === id);
-            if (!doc) return;
-
-            const inputLink = prompt(`Tempelkan (Paste) Link Google Drive untuk:\n"${doc.nama}"`, doc.link || "");
-            if (inputLink !== null) {
-                doc.link = inputLink.trim();
-                saveLocalState();
-                renderRKPTable();
-                renderAuditTable();
-                updateDashboard();
-            }
-        }
-
-        function tambahItemRKPDes() {
-            const nama = prompt("Masukkan Nama Berkas RKPDes Baru:");
-            if (nama && nama.trim() !== "") {
-                const docs = appState.rkpData[appState.activeRkpYear];
-                const newId = docs.length ? Math.max(...docs.map(d => d.id)) + 1 : 1;
-                docs.push({ id: newId, nama: nama.trim(), link: "" });
-                saveLocalState();
-                renderRKPTable();
-                renderAuditTable();
-                updateDashboard();
-            }
-        }
-
-        function renderAuditTable() {
-            const tbody = document.getElementById('tb-audit');
-            if(!tbody) return;
-            const docs = appState.rkpData[appState.activeRkpYear] || [];
-
-            tbody.innerHTML = docs.map(doc => {
-                const hasLink = doc.link && doc.link.trim() !== "";
-                return `
-                    <tr>
-                        <td>${doc.nama}</td>
-                        <td>
-                            <span class="badge ${hasLink ? 'badge-success' : 'badge-danger'}">
-                                ${hasLink ? 'Lengkap (Siap Audit)' : 'Belum Ada Berkas'}
-                            </span>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-
-        function updateDashboard() {
-            const rpjmVal = document.getElementById('dash-rpjm-period');
-            if(rpjmVal) rpjmVal.innerText = appState.activeRpjmPeriod;
-
-            const rkpVal = document.getElementById('dash-rkp-year');
-            if(rkpVal) rkpVal.innerText = appState.activeRkpYear;
-
-            const yearLbl = document.getElementById('dash-year-label');
-            if(yearLbl) yearLbl.innerText = appState.activeRkpYear;
-
-            const docs = appState.rkpData[appState.activeRkpYear] || [];
-            const terisi = docs.filter(d => d.link && d.link.trim() !== "").length;
-            const total = docs.length;
-            const persen = total > 0 ? Math.round((terisi / total) * 100) : 0;
-
-            const progressVal = document.getElementById('dash-rkp-progress');
-            if(progressVal) progressVal.innerText = persen + "%";
         }
 
         function switchPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
 
             const targetPage = document.getElementById(`page-${pageId}`);
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-            } else {
-                const generic = document.getElementById('page-generic');
-                document.getElementById('generic-title').innerText = 'Modul ' + pageId.toUpperCase();
-                generic.classList.remove('hidden');
-            }
+            if (targetPage) targetPage.classList.remove('hidden');
 
-            const activeBtn = document.getElementById(`btn-nav-${pageId}`);
-            if (activeBtn) activeBtn.classList.add('active');
+            const activeNav = document.getElementById(`btn-nav-${pageId}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            renderAllPages();
         }
 
-        function backupJSON() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+        function renderAllPages() {
+            renderDashboard();
+            ['rak01', 'rak02', 'rak03', 'rak04', 'rak05', 'rak06'].forEach(cat => {
+                renderRackByLaci(cat, `container-${cat}`);
+            });
+        }
+
+        function renderDashboard() {
+            // Render IDM Data
+            const idm = appData.idm || defaultData.idm;
+            document.getElementById('idm-status-text').innerText = idm.status;
+            document.getElementById('idm-score-val').innerText = idm.skor;
+            document.getElementById('idm-iks-val').innerText = idm.iks;
+            document.getElementById('idm-ike-val').innerText = idm.ike;
+            document.getElementById('idm-ikl-val').innerText = idm.ikl;
+
+            // Render SDGs Data
+            const sdgs = appData.sdgs || defaultData.sdgs;
+            document.getElementById('sdgs-avg-val').innerText = `${sdgs.avgScore} / 100`;
+            document.getElementById('sdgs-progress-fill').style.width = `${sdgs.avgScore}%`;
+
+            const sdgsContainer = document.getElementById('sdgs-goals-container');
+            sdgsContainer.innerHTML = (sdgs.goals || []).map(g => `
+                <div class="goal-chip">
+                    <span>${g.id}. ${g.name}</span>
+                    <b>${g.score}%</b>
+                </div>
+            `).join('');
+
+            // Render Rack Counter Stats
+            ['rak01', 'rak02', 'rak03', 'rak04', 'rak05', 'rak06'].forEach(cat => {
+                const list = appData[cat] || [];
+                const linked = list.filter(i => i.link && i.link.trim() !== "").length;
+                document.getElementById(`stat-${cat}`).innerText = list.length;
+                document.getElementById(`stat-${cat}-sub`).innerText = `${linked} Terhubung GDrive`;
+            });
+
+            // Render Recent Added Items
+            const recentGrid = document.getElementById('dashboard-recent-grid');
+            let allItems = [];
+            ['rak01', 'rak02', 'rak03', 'rak04', 'rak05', 'rak06'].forEach(cat => {
+                (appData[cat] || []).forEach(item => {
+                    allItems.push({ ...item, category: cat });
+                });
+            });
+
+            allItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+            const recentItems = allItems.slice(0, 6);
+
+            if (recentItems.length === 0) {
+                recentGrid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;">Belum ada dokumen yang dimasukkan.</div>`;
+                return;
+            }
+
+            recentGrid.innerHTML = recentItems.map(item => createCardHTML(item.category, item)).join('');
+        }
+
+        function updateIDMData() {
+            const current = appData.idm;
+            const status = prompt("Masukkan Status Desa (misal: DESA MANDIRI, DESA MAJU, DESA BERKEMBANG):", current.status);
+            if (!status) return;
+
+            const skor = prompt("Masukkan Skor Komposit IDM (misal: 0.8241):", current.skor);
+            const iks = prompt("Masukkan Skor IKS (Indeks Ketahanan Sosial):", current.iks);
+            const ike = prompt("Masukkan Skor IKE (Indeks Ketahanan Ekonomi):", current.ike);
+            const ikl = prompt("Masukkan Skor IKL (Indeks Ketahanan Lingkungan):", current.ikl);
+
+            appData.idm = {
+                status: status.trim().toUpperCase(),
+                skor: parseFloat(skor) || current.skor,
+                iks: parseFloat(iks) || current.iks,
+                ike: parseFloat(ike) || current.ike,
+                ikl: parseFloat(ikl) || current.ikl
+            };
+
+            saveDatabase();
+            renderDashboard();
+            alert("Data IDM Desa Kaduagung berhasil diperbarui!");
+        }
+
+        function updateSDGsData() {
+            const currentAvg = appData.sdgs.avgScore;
+            const newAvg = prompt("Masukkan Rata-rata Skor Capaian SDGs Desa Kaduagung (0 - 100):", currentAvg);
+            if (newAvg !== null) {
+                appData.sdgs.avgScore = parseFloat(newAvg) || currentAvg;
+                saveDatabase();
+                renderDashboard();
+                alert("Skor SDGs Desa berhasil diperbarui!");
+            }
+        }
+
+        function renderRackByLaci(catKey, containerId, filterText = "") {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            let list = appData[catKey] || [];
+
+            if (filterText.trim() !== "") {
+                list = list.filter(i => i.title.toLowerCase().includes(filterText.toLowerCase()) || i.laci.toLowerCase().includes(filterText.toLowerCase()));
+            }
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="empty-state">${filterText ? 'Tidak ada berkas yang sesuai pencarian.' : 'Rak ini masih kosong.'}</div>`;
+                return;
+            }
+
+            const grouped = {};
+            list.forEach(item => {
+                if (!grouped[item.laci]) grouped[item.laci] = [];
+                grouped[item.laci].push(item);
+            });
+
+            container.innerHTML = Object.keys(grouped).map(laciName => `
+                <div class="laci-group">
+                    <div class="laci-title">
+                        <span>📁 ${laciName}</span>
+                        <span style="font-size:0.8rem; color:var(--muted); font-weight:normal;">${grouped[laciName].length} Berkas</span>
+                    </div>
+                    <div class="rack-grid">
+                        ${grouped[laciName].map(item => createCardHTML(catKey, item)).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function createCardHTML(catKey, item) {
+            const hasLink = item.link && item.link.trim() !== "";
+
+            return `
+                <div class="rack-card">
+                    <div>
+                        <span class="card-type-icon">${item.icon || '📄'}</span>
+                        <span class="badge ${hasLink ? 'badge-linked' : 'badge-unlinked'}">
+                            ${hasLink ? '✓ Terhubung GDrive' : '• Belum Ada Link'}
+                        </span>
+                        <div class="card-item-title">${item.title}</div>
+                        <div class="card-date">Tanggal: ${item.date}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline" style="padding:6px 10px; font-size:0.78rem;" onclick="editLink('${catKey}', ${item.id})">
+                            🔗 ${hasLink ? 'Ubah Link' : 'Paste Link'}
+                        </button>
+                        ${hasLink ? `<a href="${item.link}" target="_blank" class="btn btn-gdrive" style="padding:6px 10px; font-size:0.78rem;">↗️ Buka GDrive</a>` : ''}
+                        <button class="btn btn-outline" style="padding:6px 8px; font-size:0.78rem; color:var(--danger);" onclick="deleteItem('${catKey}', ${item.id})">🗑️</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addNewItem(catKey) {
+            const laciList = [...new Set((appData[catKey] || []).map(i => i.laci))];
+            let laciChosen = "";
+
+            if (laciList.length > 0) {
+                const promptMsg = `Pilih Laci (Ketik nomor pilihan Anda):\n` + laciList.map((l, idx) => `${idx + 1}. ${l}`).join('\n') + `\n\nAtau ketik nama Laci baru:`;
+                const choice = prompt(promptMsg, "1");
+                if (!choice) return;
+
+                const choiceNum = parseInt(choice);
+                if (!isNaN(choiceNum) && choiceNum >= 1 && choiceNum <= laciList.length) {
+                    laciChosen = laciList[choiceNum - 1];
+                } else {
+                    laciChosen = choice.trim();
+                }
+            } else {
+                laciChosen = prompt("Masukkan Nama Laci/Folder:");
+                if (!laciChosen) return;
+            }
+
+            const title = prompt(`Masukkan Judul Berkas untuk [${laciChosen}]:`);
+            if (!title || title.trim() === "") return;
+
+            const link = prompt(`Tempelkan (Paste) Link Google Drive untuk Berkas Ini:\n(Kosongkan jika belum ada link)`);
+
+            const newItem = {
+                id: Date.now(),
+                laci: laciChosen,
+                title: title.trim(),
+                link: link ? link.trim() : "",
+                date: new Date().toISOString().split('T')[0],
+                icon: "📄"
+            };
+
+            appData[catKey].unshift(newItem);
+            saveDatabase();
+            renderAllPages();
+        }
+
+        function editLink(catKey, itemId) {
+            const item = appData[catKey].find(i => i.id === itemId);
+            if (!item) return;
+
+            const newLink = prompt(`Tempelkan (Paste) Link Google Drive untuk:\n"${item.title}"`, item.link || "");
+            if (newLink !== null) {
+                item.link = newLink.trim();
+                saveDatabase();
+                renderAllPages();
+            }
+        }
+
+        function deleteItem(catKey, itemId) {
+            if (confirm("Apakah Anda yakin ingin menghapus berkas ini dari rak?")) {
+                appData[catKey] = appData[catKey].filter(i => i.id !== itemId);
+                saveDatabase();
+                renderAllPages();
+            }
+        }
+
+        function filterRack(catKey, text) {
+            renderRackByLaci(catKey, `container-${catKey}`, text);
+        }
+
+        function setOrOpenMasterGDrive() {
+            if (appData.masterGDrive && appData.masterGDrive.trim() !== "") {
+                window.open(appData.masterGDrive, '_blank');
+            } else {
+                const link = prompt("Masukkan Link Google Drive Folder Utama/Induk Desa Anda:");
+                if (link && link.trim() !== "") {
+                    appData.masterGDrive = link.trim();
+                    saveDatabase();
+                    alert("Link Folder Utama berhasil disimpan!");
+                }
+            }
+        }
+
+        function backupData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
             const dlAnchor = document.createElement('a');
             dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", `Backup_Arsip_KaperDesa_${new Date().toISOString().slice(0,10)}.json`);
+            dlAnchor.setAttribute("download", `Backup_Rak_Kaur_Perencanaan_Kaduagung_${new Date().toISOString().slice(0,10)}.json`);
             document.body.appendChild(dlAnchor);
             dlAnchor.click();
             dlAnchor.remove();
         }
 
-        function restoreJSON() {
+        function restoreData() {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
@@ -616,10 +725,10 @@
                 reader.readAsText(file, 'UTF-8');
                 reader.onload = readerEvent => {
                     try {
-                        appState = JSON.parse(readerEvent.target.result);
-                        saveLocalState();
-                        alert('Data arsip berhasil dimuat ulang!');
-                        location.reload();
+                        appData = JSON.parse(readerEvent.target.result);
+                        saveDatabase();
+                        renderAllPages();
+                        alert('Data Rak & Monitoring berhasil dimuat ulang!');
                     } catch (err) {
                         alert('Gagal membaca berkas backup JSON.');
                     }
