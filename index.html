@@ -45,9 +45,9 @@
         }
         .sidebar-overlay.active { display: block; }
         
-        /* Sidebar */
+        /* Clean Sidebar Without Scrollbar Bar */
         .sidebar { 
-            width: 300px; 
+            width: 290px; 
             background: var(--sidebar-bg); 
             color: #fff; 
             padding: 24px 16px; 
@@ -59,7 +59,12 @@
             z-index: 50;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-right: 1px solid var(--line);
+            overflow-x: hidden; /* Hilangkan scrollbar horizontal */
         }
+
+        /* Custom Scrollbar Vertikal Halus */
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
         @media (max-width: 992px) {
             .sidebar {
@@ -127,7 +132,7 @@
         .sub-btn:hover { color: #38bdf8; border-left-color: #38bdf8; background: rgba(255,255,255,0.04); }
 
         /* Main Workspace */
-        .main { flex: 1; display: flex; flex-direction: column; padding: 22px; gap: 18px; overflow-y: auto; width: 100%; }
+        .main { flex: 1; display: flex; flex-direction: column; padding: 22px; gap: 18px; overflow-y: auto; width: 100%; min-width: 0; }
         
         /* Ticker Bar */
         .running-text-bar {
@@ -247,7 +252,7 @@
             padding: 4px 10px; border-radius: 8px; white-space: nowrap;
         }
 
-        /* Laci Group & List View Layout (Compact) */
+        /* Laci Group & List View Layout */
         .laci-group { 
             background: var(--panel-glass); backdrop-filter: blur(14px);
             border: 1px solid var(--line); border-radius: 18px; 
@@ -298,7 +303,7 @@
         @keyframes pulse-dot { 0% { transform: scale(0.9); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.8; } }
 
         .search-box { 
-            width: 100%; min-width: 200px; max-width: 380px; padding: 9px 15px; 
+            width: 100%; min-width: 180px; max-width: 320px; padding: 9px 15px; 
             border: 1px solid var(--line); border-radius: 12px; font-size: 0.86rem; 
             outline: none; background: rgba(15, 23, 42, 0.8); color: #fff; transition: all 0.2s; 
         }
@@ -339,8 +344,8 @@
             <div style="text-align:left; margin-bottom:15px;">
                 <label style="font-size:0.75rem; color:#cbd5e1; font-weight:700; display:block; margin-bottom:6px;">PILIH HAK AKSES:</label>
                 <select id="login-role-select" class="search-box" style="max-width:100%; width:100%; margin-bottom:12px;">
-                    <option value="admin">🔒 Administrator (Aji Wilson - Edit Full)</option>
-                    <option value="auditor">👁️ Non-Admin / Auditor (Hanya Lihat)</option>
+                    <option value="admin">🔒 Administrator</option>
+                    <option value="auditor">👁️ User</option>
                 </select>
 
                 <label style="font-size:0.75rem; color:#cbd5e1; font-weight:700; display:block; margin-bottom:6px;">MASUKKAN KATA SANDI:</label>
@@ -357,7 +362,7 @@
     <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeMobileSidebar()"></div>
 
     <div class="app">
-        <!-- Sidebar Navigation -->
+        <!-- Sidebar Navigation (Tanpa RAK 01 - Langsung Nama Judul) -->
         <aside id="sidebar" class="sidebar">
             <div class="brand">
                 <div class="brand-left">
@@ -397,12 +402,12 @@
                 
                 <div class="nav-label">Daftar Rak Digital (Sub-Menu)</div>
 
-                <!-- Accordions RAK 01 - 06 -->
+                <!-- Accordions - Langsung Nama Judul tanpa RAK 01 dst -->
                 <div>
                     <button class="nav-btn" onclick="toggleAccordion('acc-rak01')">
                         <div class="nav-btn-content">
                             <i class="fa-solid fa-scale-balanced"></i>
-                            <span>RAK 01: Regulasi</span>
+                            <span>Regulasi</span>
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
                     </button>
@@ -417,7 +422,7 @@
                     <button class="nav-btn" onclick="toggleAccordion('acc-rak02')">
                         <div class="nav-btn-content">
                             <i class="fa-solid fa-book-bookmark"></i>
-                            <span>RAK 02: RPJM Desa</span>
+                            <span>RPJM Desa</span>
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
                     </button>
@@ -432,7 +437,7 @@
                     <button class="nav-btn" onclick="toggleAccordion('acc-rak03')">
                         <div class="nav-btn-content">
                             <i class="fa-solid fa-calendar-check"></i>
-                            <span>RAK 03: RKP Desa</span>
+                            <span>RKP Desa</span>
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
                     </button>
@@ -449,7 +454,7 @@
                     <button class="nav-btn" onclick="toggleAccordion('acc-rak04')">
                         <div class="nav-btn-content">
                             <i class="fa-solid fa-calculator"></i>
-                            <span>RAK 04: Penganggaran</span>
+                            <span>Penganggaran</span>
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
                     </button>
@@ -465,7 +470,7 @@
                     <button class="nav-btn" onclick="toggleAccordion('acc-rak05')">
                         <div class="nav-btn-content">
                             <i class="fa-solid fa-chart-pie"></i>
-                            <span>RAK 05: Data Profil</span>
+                            <span>Data Profil</span>
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
                     </button>
@@ -481,7 +486,7 @@
                     <button class="nav-btn" onclick="toggleAccordion('acc-rak06')">
                         <div class="nav-btn-content">
                             <i class="fa-solid fa-square-poll-vertical"></i>
-                            <span>RAK 06: Monev & LPPD</span>
+                            <span>Monev & LPPD</span>
                         </div>
                         <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;"></i>
                     </button>
@@ -539,37 +544,37 @@
                             <div class="grid-stats">
                                 <div class="card-stat">
                                     <i class="fa-solid fa-scale-balanced card-stat-icon"></i>
-                                    <small>RAK 01 (Regulasi)</small>
+                                    <small>Regulasi</small>
                                     <div class="val" id="stat-rak01">0</div>
                                     <div class="sub" id="stat-rak01-sub">0 Terhubung</div>
                                 </div>
                                 <div class="card-stat">
                                     <i class="fa-solid fa-book-bookmark card-stat-icon"></i>
-                                    <small>RAK 02 (RPJMDes)</small>
+                                    <small>RPJMDes</small>
                                     <div class="val" id="stat-rak02">0</div>
                                     <div class="sub" id="stat-rak02-sub">0 Terhubung</div>
                                 </div>
                                 <div class="card-stat">
                                     <i class="fa-solid fa-calendar-check card-stat-icon"></i>
-                                    <small>RAK 03 (RKPDes)</small>
+                                    <small>RKPDes</small>
                                     <div class="val" id="stat-rak03">0</div>
                                     <div class="sub" id="stat-rak03-sub">0 Terhubung</div>
                                 </div>
                                 <div class="card-stat">
                                     <i class="fa-solid fa-calculator card-stat-icon"></i>
-                                    <small>RAK 04 (APBDes)</small>
+                                    <small>APBDes</small>
                                     <div class="val" id="stat-rak04">0</div>
                                     <div class="sub" id="stat-rak04-sub">0 Terhubung</div>
                                 </div>
                                 <div class="card-stat">
                                     <i class="fa-solid fa-chart-pie card-stat-icon"></i>
-                                    <small>RAK 05 (Profil)</small>
+                                    <small>Profil</small>
                                     <div class="val" id="stat-rak05">0</div>
                                     <div class="sub" id="stat-rak05-sub">0 Terhubung</div>
                                 </div>
                                 <div class="card-stat">
                                     <i class="fa-solid fa-square-poll-vertical card-stat-icon"></i>
-                                    <small>RAK 06 (LPPD)</small>
+                                    <small>LPPD</small>
                                     <div class="val" id="stat-rak06">0</div>
                                     <div class="sub" id="stat-rak06-sub">0 Terhubung</div>
                                 </div>
@@ -651,11 +656,11 @@
                 </div>
             </section>
 
-            <!-- RAK PAGES (01 - 06) WITH COMPACT LIST VIEW -->
+            <!-- RAK PAGES (01 - 06) -->
             <section id="page-rak01" class="page-content hidden">
                 <div class="rack-header">
                     <div class="rack-title">
-                        <h3><i class="fa-solid fa-scale-balanced" style="color:var(--brand);"></i>DOKUMEN REGULASI & ACUAN</h3>
+                        <h3><i class="fa-solid fa-scale-balanced" style="color:var(--brand);"></i> DOKUMEN REGULASI & ACUAN</h3>
                         <p>Kumpulan UU, Permendagri, Permendes, Perda, Perbup, Perdes & SK Kepala Desa</p>
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -669,7 +674,7 @@
             <section id="page-rak02" class="page-content hidden">
                 <div class="rack-header">
                     <div class="rack-title">
-                        <h3><i class="fa-solid fa-book-bookmark" style="color:var(--brand);"></i>PERENCANAAN JANGKA MENENGAH (RPJM DESA)</h3>
+                        <h3><i class="fa-solid fa-book-bookmark" style="color:var(--brand);"></i> PERENCANAAN JANGKA MENENGAH (RPJM DESA)</h3>
                         <p>Dokumen RPJM Desa Periode Berjalan, BA Musdes, & Daftar Usulan Rencana Desa</p>
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -683,7 +688,7 @@
             <section id="page-rak03" class="page-content hidden">
                 <div class="rack-header">
                     <div class="rack-title">
-                        <h3><i class="fa-solid fa-calendar-check" style="color:var(--brand);"></i>PERENCANAAN TAHUNAN (RKP DESA)</h3>
+                        <h3><i class="fa-solid fa-calendar-check" style="color:var(--brand);"></i> PERENCANAAN TAHUNAN (RKP DESA)</h3>
                         <p>Dokumen RKP Desa Final, SK Tim Penyusun, BA Musrenbangdes, Matriks RKA & DU-RKP</p>
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -697,7 +702,7 @@
             <section id="page-rak04" class="page-content hidden">
                 <div class="rack-header">
                     <div class="rack-title">
-                        <h3><i class="fa-solid fa-calculator" style="color:var(--brand);"></i>PENGANGGARAN (APB DESA & RAK)</h3>
+                        <h3><i class="fa-solid fa-calculator" style="color:var(--brand);"></i> PENGANGGARAN (APB DESA & RAK)</h3>
                         <p>Rancangan APB Desa, APB Desa Final, RAK Desa Triwulan, & RAB Kegiatan</p>
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -711,7 +716,7 @@
             <section id="page-rak05" class="page-content hidden">
                 <div class="rack-header">
                     <div class="rack-title">
-                        <h3><i class="fa-solid fa-chart-pie" style="color:var(--brand);"></i>DATA PROFIL & INVENTARISASI DESA</h3>
+                        <h3><i class="fa-solid fa-chart-pie" style="color:var(--brand);"></i> DATA PROFIL & INVENTARISASI DESA</h3>
                         <p>Prodeskel/Epdeskel, Data SDGs & IDM, Data Kemiskinan/Potensi, & Peta Topografi</p>
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -725,7 +730,7 @@
             <section id="page-rak06" class="page-content hidden">
                 <div class="rack-header">
                     <div class="rack-title">
-                        <h3><i class="fa-solid fa-square-poll-vertical" style="color:var(--brand);"></i>MONITORING, EVALUASI & PELAPORAN</h3>
+                        <h3><i class="fa-solid fa-square-poll-vertical" style="color:var(--brand);"></i> MONITORING, EVALUASI & PELAPORAN</h3>
                         <p>Laporan Realisasi Fisik/Keuangan, Foto Kegiatan 0%-100%, LPPD & ILPPD</p>
                     </div>
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -846,9 +851,9 @@
                     currentRole = "auditor";
                     document.getElementById('screen-login-overlay').classList.add('hidden');
                     applyRolePermissions();
-                    alert("Login Berhasil! Anda masuk sebagai Auditor / Non-Admin (Read-Only).");
+                    alert("Login Berhasil! Anda masuk sebagai User (Read-Only).");
                 } else {
-                    alert("Password Non-Admin Salah!");
+                    alert("Password User Salah!");
                 }
             }
         }
@@ -866,11 +871,11 @@
             const tickerText = document.getElementById('ticker-mode-text');
 
             if (isAuditor) {
-                roleBadge.innerText = "Mode: Auditor / Publik 👁️";
+                roleBadge.innerText = "Mode: User / Publik 👁️";
                 roleBadge.style.color = "#f59e0b";
-                topbarPill.innerHTML = '<i class="fa-solid fa-eye"></i> Mode Audit (Read-Only)';
+                topbarPill.innerHTML = '<i class="fa-solid fa-eye"></i> Mode User (Read-Only)';
                 topbarPill.className = "status-pill status-pill-audit";
-                if (tickerText) tickerText.innerText = "Auditor Read-Only (Pengawasan)";
+                if (tickerText) tickerText.innerText = "User Read-Only (Pengawasan)";
             } else {
                 roleBadge.innerText = "Mode: Administrator 🔒";
                 roleBadge.style.color = "#38bdf8";
